@@ -5,8 +5,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta property="og:title" content="Busca Mascotas" />
-    {% comment %} <meta property="og:type" content="website" />
+    {% comment %} <meta property="og:title" content="Busca Mascotas" />
+    <meta property="og:type" content="website" />
     <meta property="og:image" content="http://buscamascota.org/static/app/img/og_image.png"/>
     <meta property="og:url" content="http://buscamascota.org/" /> {% endcomment %}
     <meta name="description" content="Sitio con información de mascotas encontradas o perdidas">
@@ -14,14 +14,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/26644d60b9.js" crossorigin="anonymous"></script>
-    <link href="{% static 'app/css/card.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/card.css' %}" type="stylesheet">
     <link rel="icon" type="image/png" href="{% static 'app/favicon.ico' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'app/css/main.css' %}">
     <title>Busca Mascotas</title>
 </head>
-<body id="page-top">
+<body>
     {% include 'navbar.html' %}
-    <p>Hello there!</p>
     {% block content %}
     {% endblock %}
     {% include 'footer.html' %}
@@ -32,7 +31,6 @@
             {% comment %} <small><div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div></small> {% endcomment %}
         </div>
     </section>
-    <img src="{% static "app/153.jpg" %}" alt="My image">
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
