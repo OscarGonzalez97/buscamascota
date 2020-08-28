@@ -1,14 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<section  class="page-section  bg-secondary text-white mb-0" id="donacion">
-        <div class="row" id="imagenDonacion">
-            <div class="col-lg-6 ml-auto py-5">        
-                <h4 class="page-section-heading text-center text-dark">Puedes contribuir <br/> para que este sitio siga activo <br/> y funcionando siempre</h3>
-            </div>
-            <div class="col-lg-4 ml-auto py-5">        
-                <button type="button" class="btn btn-info btn-lg">Donar</button>
-            </div>
+<script>
+    {% block javascript %}
+    //leaflet map
+    var map = initMap('map', true);
+
+    //var markers = L.markerClusterGroup(); // Leaflet's cluster group
+
+    //addMarkers({{ scientists|safe }}, true, map, markers);    
+    
+
+    {% endblock %}
+</script>
+<!-- Masthead -->
+<header class="text-center">
+    <div class="container-fluid px-0" >
+        <div id="map">
+            {% comment %} <div class="container" id="encimaMapa">
+                <div class="jumbotron transparentBackground" >
+                    <a class="btn btn-xl btn-info" href="{% url 'map' %}">
+                        <i class="fas fa-map mr-2 text-light"></i>
+                        <p class="text-light"> Ver Mapa</p>
+                    </a>
+                </div>
+            </div> {% endcomment %}
         </div>
+    </div>
+</header>
+<!--Para Quien Section-->
+<section class="page-section bg-secondary text-white mb-0" id="paraQuien">
+    <div class="row">
+        <div class="col-lg-6 text-center" id="seccionAzulIzquierda">
+            <h2 class="page-section-heading text-center text-light">Qui&eacute;n puede utilizar el sitio?</h2> 
+            <h4 class="page-section-text text-center text-light"> {% lorem 2 b random %}</h4>
+        </div>
+        <div class="col-lg-6 text-center py-5" id="seccionAzulDerecha">
+            <img src="{% static 'app/img/paw-five.jpg' %}" class="img-fluid" alt="Man and dog">
+        </div>
+    </div>
+</section>
+<!--ElPorque Section-->
+<section class="page-section bg-secondary text-white mb-0" id="elPorque">
+    <div class="row">
+        <div class="col-lg-6 text-center py-5" id="seccionAmarillaIzquierda">
+            <img src="{% static 'app/img/153.jpg' %}" class="img-fluid" alt="Girl and dog">    
+        </div>
+        <div class="col-lg-6 text-center" id="seccionAmarillaDerecha">
+            <h2 class="page-section-heading text-center text-dark">Porqu&eacute; del sitio</h2>  
+            <h4 class="page-section-text text-center text-dark">{% lorem 3 b random %} </h4>
+        </div>
+    </div>
+</section>
+<!--Donate Section-->
+<section  class="page-section bg-secondary text-white mb-0">
+    <div class="row" id="imagenDonacion">
+        <div class="col-lg-6 ml-auto py-5">        
+            <h4 class="page-section-heading text-center text-light">Puedes colaborar <br/> para que este sitio siga activo <br/> y funcionando siempre</h4>
+        </div>
+        <div class="col-lg-4 ml-auto py-5 text-center">        
+            <a class="btn btn-info btn-lg" href="{% url 'colaborar' %}">
+                Colaborar
+            </a>
+        </div>
+    </div>
 </section>
 {% endblock %}

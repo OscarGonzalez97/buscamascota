@@ -1,4 +1,7 @@
 
+/* el celeste es este  #65CAD5*/
+/* el amarillo es este #FFD933*/
+
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
     margin-bottom: 0.5rem;
@@ -31,4 +34,46 @@ h1, h2, h3, h4, h5, h6,
   background-size: cover;
   background-color: #cccccc;
   height : 100%;  
-} 
+}
+
+/*TODO add to bootstrap this colors*/
+#seccionAmarillaIzquierda{
+  background-color: #FFD933;
+}
+#seccionAmarillaDerecha{
+  background-color: #FFD933;
+}
+#seccionAzulIzquierda{
+  background-color: #65CAD5;
+}
+#seccionAzulDerecha{
+  background-color: #65CAD5;
+}
+
+.colorAmarillo{
+  background-color: #FFD933;
+}
+
+/* #encimaMapa{
+  position: absolute;
+  margin: auto;
+  padding: 10px;
+  z-index: 500;
+} */
+
+/*For the Leaflet Map*/
+.map {
+  position: relative;
+  display:inline-block;
+}
+#map{
+  width: 100%;
+  height: 650px;
+}
+#map-registration {
+  height: 400px;  /* The height is 400 pixels */
+}
+
+/* .img-fluid{
+  width: 100%;
+} */

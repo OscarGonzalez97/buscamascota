@@ -4,3 +4,9 @@ from django.http import HttpResponse
 # Create your views here.
 def index(request):
     return render(request,'index.html')
+
+def colaborar(request):
+    return render(request,'colaborar.html')
+
+def map(request):
+    return render(request,'map.html')
