@@ -24,7 +24,7 @@ function initMap(mapDivId,isIndex) {
                 pseudoFullscreen: false // if true, fullscreen to page width and height
             },
             minZoom: 2
-        }).setView([0, 0], 2);
+        }).setView([-23.3165935,-58.1693445], 6); //coordenadas de Paraguay
     }
 
 

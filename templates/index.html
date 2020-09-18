@@ -17,25 +17,17 @@
 <header class="text-center">
     <div class="container-fluid px-0" >
         <div id="map">
-            {% comment %} <div class="container" id="encimaMapa">
-                <div class="jumbotron transparentBackground" >
-                    <a class="btn btn-xl btn-info" href="{% url 'map' %}">
-                        <i class="fas fa-map mr-2 text-light"></i>
-                        <p class="text-light"> Ver Mapa</p>
-                    </a>
-                </div>
-            </div> {% endcomment %}
         </div>
     </div>
 </header>
 <!--Para Quien Section-->
 <section class="page-section bg-secondary text-white mb-0" id="paraQuien">
     <div class="row">
-        <div class="col-lg-6 text-center" id="seccionAzulIzquierda">
+        <div class="col-lg-6 text-center" style="background-color: #65CAD5;">
             <h2 class="page-section-heading text-center text-light">Qui&eacute;n puede utilizar el sitio?</h2> 
             <h4 class="page-section-text text-center text-light"> {% lorem 2 b random %}</h4>
         </div>
-        <div class="col-lg-6 text-center py-5" id="seccionAzulDerecha">
+        <div class="col-lg-6 text-center py-5" style="background-color: #65CAD5;">
             <img src="{% static 'app/img/paw-five.jpg' %}" class="img-fluid" alt="Man and dog">
         </div>
     </div>
@@ -43,10 +35,10 @@
 <!--ElPorque Section-->
 <section class="page-section bg-secondary text-white mb-0" id="elPorque">
     <div class="row">
-        <div class="col-lg-6 text-center py-5" id="seccionAmarillaIzquierda">
+        <div class="col-lg-6 text-center py-5" style="background-color: #FFD933;">
             <img src="{% static 'app/img/153.jpg' %}" class="img-fluid" alt="Girl and dog">    
         </div>
-        <div class="col-lg-6 text-center" id="seccionAmarillaDerecha">
+        <div class="col-lg-6 text-center" style="background-color: #FFD933;">
             <h2 class="page-section-heading text-center text-dark">Porqu&eacute; del sitio</h2>  
             <h4 class="page-section-text text-center text-dark">{% lorem 3 b random %} </h4>
         </div>
@@ -59,7 +51,7 @@
             <h4 class="page-section-heading text-center text-light">Puedes colaborar <br/> para que este sitio siga activo <br/> y funcionando siempre</h4>
         </div>
         <div class="col-lg-4 ml-auto py-5 text-center">        
-            <a class="btn btn-info btn-lg" href="{% url 'colaborar' %}">
+            <a class="btn btn-info btn-lg" href="{% url 'colaborar' %}" >
                 Colaborar
             </a>
         </div>

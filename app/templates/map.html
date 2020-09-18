@@ -9,10 +9,35 @@
 </script>
 
 {% block content %}
+<div class="container">
+    <div class="row align-items-center mb-3 mt-3 justify-content-center ">
+        <form class="form-inline" method="POST" id="filter">
+            {% csrf_token %}
+            <label class="my-1 mr-2" for="report_type">Tipo de reporte: </label>
+            <select class="custom-select my-1 mr-sm-2" id="report_type">
+                <option selected value="">Todos</option>
+                {% for report_key, report_value in report_type %}
+                    <option value="{{ report_key }}">{{ report_value }}</option>
+                {% endfor %}
+            </select>
+            <label class="my-1 mr-2" for="specie">Especie: </label>
+            <select class="custom-select my-1 mr-sm-2" id="specie">
+                <option value="" selected>Todas</option>
+                {% for specie_key, specie_value in specie %}
+                    <option value="{{ specie_key }}">{{ specie_value }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary my-1">Buscar</button>
+        </form>
+    </div>
+</div>
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-6">
             <div id="map"></div>
+        </div>
+        <div class="col-6">
+            
         </div>
     </div>
 </div>

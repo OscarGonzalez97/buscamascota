@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from app.constants import REPORT_TYPE, SPECIE
 
 # Create your views here.
 def index(request):
@@ -9,4 +10,8 @@ def colaborar(request):
     return render(request,'colaborar.html')
 
 def map(request):
-    return render(request,'map.html')
+    context={
+        'report_type':REPORT_TYPE,
+        'specie': SPECIE
+    }
+    return render(request,'map.html', context)
