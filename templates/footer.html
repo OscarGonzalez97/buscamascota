@@ -1,16 +1,23 @@
+{% load static %}
 <!-- Footer -->
 <footer class="footer text-center">
     <div class="container">
         <div class="row">
         <!-- Footer Location -->
-            <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="col-lg-4 mb-5 mb-lg-0">
                 <p class="lead mb-0">Sitio creado y administrado por<br> <a href="https://www.linkedin.com/in/oscar-enrique-g-443304181/">Oscar Gonz&aacute;lez</a>
                 </p>
+                <img src="{% static 'app/img/3perrosyyo.jpeg' %}" class="rounded-circle" alt="Creador" width="200" height="220">
             </div>
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <nav class="nav flex-column">
+                <a class="nav-link active border border-info text-light" href="#">T&eacute;rminos de uso</a>
+                </nav>
+             </div>
             <!-- Footer Social Icons -->
-            <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="col-lg-4 mb-5 mb-lg-0">
                 <h4 class="text-uppercase mb-4">Contacto</h4>
-                <a class="btn btn-outline-light btn-social mx-1" href="https://twitter.com/" target="_blank">
+                <a class="btn btn-outline-light btn-social mx-1" href="https://twitter.com/BuscaMascotapy" target="_blank">
                     <i class="fab fa-fw fa-twitter"></i>
                 </a>
                 <a class="btn btn-outline-light btn-social mx-1" href="https://facebook.com/" target="_blank">

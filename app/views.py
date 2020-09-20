@@ -6,7 +6,7 @@ from app.constants import REPORT_TYPE, SPECIE
 def index(request):
     return render(request,'index.html')
 
-def colaborar(request):
+def colaborate(request):
     return render(request,'colaborar.html')
 
 def map(request):
@@ -15,3 +15,6 @@ def map(request):
         'specie': SPECIE
     }
     return render(request,'map.html', context)
+
+def publish(request):
+    return render(request,'publicar.html')

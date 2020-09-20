@@ -1,4 +1,42 @@
 from django.db import models
-from app.constants import REPORT_TYPE, SPECIE
+from app.constants import REPORT_TYPE, SPECIE, SEX
+from django.utils import timezone
 
+class Report(models.Model):
+    report_type = models.CharField(max_length=12, choices=REPORT_TYPE, default='')
+    title = models.CharField(max_length=200)
+    description = models.TextField(max_length=2000)
+    specie = models.CharField(max_length=, choices=SPECIE, default='')
+    age = models.models.IntegerField(null=True,blank=True)
+    sex = models.CharField(max_length=12, choices=SEX, default='')
+    country = models.CharField(max_length=100, null=True, blank=True)
+    region = models.CharField(max_length=100, null=True, blank=True)
+    postal_code = models.CharField(max_length=50, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    adress = models.CharField(max_length=300, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    report_state = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(editable=False, default=timezone.now)
+    edited_at = models.DateTimeField(null=True, blank=True)
+    last_time_seen = models.DateField(null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        # On save, update timestamps
+        if not self.id:
+            self.created_at = timezone.now()
+            self.report_state = False
+        self.edited_at = timezone.now()
+        return super(Report, self).save(*args, **kwargs)
+
+class Imagen(models.Model):
+    picture = models.ImageField( upload_to='/animals')
+    report = models.ForeignKey(Report, on_delete=models.CASCADE)
+
+class Telefono(models.Model):
+    numero = models.CharField(max_length=16)
+    report = models.ForeignKey(Report, on_delete=models.CASCADE)
+
+class AnimalColor(models.Model):
+    color = models.CharField(max_length=30)
+    report = models.ForeignKey(Report, on_delete=models.CASCADE)

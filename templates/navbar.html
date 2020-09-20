@@ -1,34 +1,4 @@
 {% load static %}
-<!-- Navigation -->
-{% comment %} <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">
-        <img src="{% static "app/img/icon.jpg" %}" width="100" height="100" alt="">
-    </a>
-    <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-info text-white rounded"
-                type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
-                aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
-    </button>
-    <div class="container"> 
-        <div class="collapse navbar-collapse justify-content-center" id="navbarResponsive">
-        <ul class="nav nav-pills">
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'index' %}">Home</a>
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="#">Publicar Mascota</a>
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'map' %}">Buscar Mascota</a>
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'colaborar' %}">Colaborar</a>
-            </li>
-        </ul>
-        </div>  
-    </div>
-</nav> {% endcomment %}
 <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
   <a class="navbar-brand" href="{% url 'index' %}">
         <img src="{% static "app/img/BUSCAMASCOTA.png" %}" width="300" height="150" alt="">
@@ -44,7 +14,7 @@
         <a class="nav-link py-3 px-0 px-lg-3" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link py-3 px-0 px-lg-3" href="#">Publicar Mascota <span class="sr-only"></span></a>
+        <a class="nav-link py-3 px-0 px-lg-3" href="{% url 'publicar' %}">Publicar Mascota <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
         <a class="nav-link py-3 px-0 px-lg-3" href="{% url 'map' %}">Buscar Mascota <span class="sr-only"></span></a>
