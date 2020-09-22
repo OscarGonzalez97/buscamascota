@@ -1,6 +1,60 @@
 {% extends 'base.html' %}
+
+<script>
+{% block javascript %}
+    //leaflet map
+    let map = initMap('map-report',false);
+    L.control.locate({
+        initialZoomLevel: 17,
+        showPopup: false
+    }).addTo(map);
+
+    let popup = L.popup();
+    let marker = L.marker();
+    
+    function onMapClick(e) {
+        marker.setLatLng(e.latlng).addTo(map);
+        console.log(e.latlng)
+        /*popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(map);*/
+    }
+
+    map.on('click', onMapClick);
+
+{% endblock %}
+</script>
+
 {% block content %}
-<div>
-    <h1> hola!</h1>
+<div class="container mt-8">
+    <div class="row">
+        <div class="col-lg-10 mt-5 mx-auto">
+            <h2 class="text-center text-uppercase text-primary mt-5">Registro de reporte</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+            </div>
+            <p>
+                
+            </p>
+            <form method="POST" onkeydown="return event.key != 'Enter';"> {% csrf_token %}
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                        {{ form.as_p }}
+                        <p style="font-size:1.5em;color:#6c757d;margin-top:2em">Elija ubicaci&oacute;n</p>
+                        <div id="map-report"></div>
+                    </div>
+                </div>
+                <div>
+                    <br>
+                    <span class="badge badge-warning">* Campos Requeridos </span>
+                    <br>
+                </div>
+                <div class="mt-10 form-group">
+                    <button type="submit" class="btn btn-success btn-lg btn-block" id="submitButton">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

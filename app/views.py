@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from app.constants import REPORT_TYPE, SPECIE
+from app.forms import ReportForm
 
 # Create your views here.
 def index(request):
@@ -17,4 +18,14 @@ def map(request):
     return render(request,'map.html', context)
 
 def publish(request):
-    return render(request,'publicar.html')
+    msg = ''
+    registration_error = -1
+    created = False
+    form = ReportForm(request.POST or None)
+    
+    #if request.method == "POST":
+
+    context = {
+        'form': form,
+    }
+    return render(request,'publicar.html', context)

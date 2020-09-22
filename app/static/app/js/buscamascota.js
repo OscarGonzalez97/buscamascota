@@ -3,6 +3,7 @@
 function initMap(mapDivId,isIndex) {
     /**
      mapDivName: ID of the map's div in the html code
+     isIndex: boolean to know if the map is Index page
       **/
     var map;
     if (isIndex){

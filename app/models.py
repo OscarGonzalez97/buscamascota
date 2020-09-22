@@ -6,11 +6,11 @@ class Report(models.Model):
     report_type = models.CharField(max_length=12, choices=REPORT_TYPE, default='')
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=2000)
-    specie = models.CharField(max_length=, choices=SPECIE, default='')
-    age = models.models.IntegerField(null=True,blank=True)
+    specie = models.CharField(max_length=6, choices=SPECIE, default='')
+    age = models.PositiveIntegerField (null=True,blank=True)
     sex = models.CharField(max_length=12, choices=SEX, default='')
+    ubication_resume = models.TextField(max_length=1000)
     country = models.CharField(max_length=100, null=True, blank=True)
-    region = models.CharField(max_length=100, null=True, blank=True)
     postal_code = models.CharField(max_length=50, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     adress = models.CharField(max_length=300, null=True, blank=True)
@@ -30,10 +30,11 @@ class Report(models.Model):
         return super(Report, self).save(*args, **kwargs)
 
 class Imagen(models.Model):
-    picture = models.ImageField( upload_to='/animals')
+    picture = models.ImageField( upload_to='animals')
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
 
-class Telefono(models.Model):
+class Contacto(models.Model):
+    nombre_apellido = models.CharField(max_length=50)
     numero = models.CharField(max_length=16)
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
 
