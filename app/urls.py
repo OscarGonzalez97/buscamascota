@@ -6,4 +6,5 @@ urlpatterns = [
     path('colaborar/', views.colaborate, name='colaborar'),
     path('map/', views.map, name='map'),
     path('publicar/', views.publish, name='publicar'),
+    path('terminos/', views.terms, name='terminos'),
 ]

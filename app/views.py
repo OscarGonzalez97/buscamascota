@@ -3,12 +3,14 @@ from django.http import HttpResponse
 from app.constants import REPORT_TYPE, SPECIE
 from app.forms import ReportForm
 
-# Create your views here.
 def index(request):
     return render(request,'index.html')
 
 def colaborate(request):
     return render(request,'colaborar.html')
+
+def terms(request):
+    return render(request,'terminos.html')
 
 def map(request):
     context={
