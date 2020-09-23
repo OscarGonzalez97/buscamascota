@@ -9,16 +9,14 @@
         showPopup: false
     }).addTo(map);
 
-    let popup = L.popup();
     let marker = L.marker();
     
     function onMapClick(e) {
         marker.setLatLng(e.latlng).addTo(map);
-        console.log(e.latlng)
-        /*popup
-            .setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(map);*/
+        // Set the value of the hidden fields
+        document.getElementById("id_latitude").value = e.latlng.lat;
+        document.getElementById("id_longitude").value = e.latlng.lng;
+        completeUbicationWidgets(e.latlng.lat, e.latlng.lng)
     }
 
     map.on('click', onMapClick);
@@ -40,14 +38,14 @@
             <form method="POST" onkeydown="return event.key != 'Enter';"> {% csrf_token %}
                 <div class="control-group">
                     <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                        {{ form.as_p }}
-                        <p style="font-size:1.5em;color:#6c757d;margin-top:2em">Elija ubicaci&oacute;n</p>
+                        <p style="margin-top:2em"><b>Elija ubicaci&oacute;n o zona cercana donde vio la mascota por &uacute;ltima vez *</b> : </p>
                         <div id="map-report"></div>
+                        <br>
+                        {{ form.as_p }}
                     </div>
                 </div>
                 <div>
-                    <br>
-                    <span class="badge badge-warning">* Campos Requeridos </span>
+                    <span class="badge badge-pill badge-warning">* Campos Requeridos </span>
                     <br>
                 </div>
                 <div class="mt-10 form-group">
