@@ -13,7 +13,7 @@ SPECIE = (
 REPORT_TYPE = (
     ('perdido', 'Perdido'),
     ('avistamiento', 'Avistamiento'),
-    ('encontrado', 'Encontrado'),
+    ('retenido', 'Retenido'),
     # ('encontradoFallecido', 'Encontrado Fallecido'),
     ('otro', 'Otro'),
 )
