@@ -34,15 +34,6 @@ class Report(models.Model):
         self.edited_at = timezone.now()
         return super(Report, self).save(*args, **kwargs)
 
-# class Imagen(models.Model):
-#     picture = models.ImageField(upload_to='animals')
-#     report = models.ForeignKey(Report, on_delete=models.CASCADE)
-
-# class Contacto(models.Model):
-#     name = models.CharField(max_length=50, null=True, blank=True)
-#     phone = models.CharField(max_length=16, null=True, blank=True)
-#     report = models.ForeignKey(Report, on_delete=models.CASCADE)
-
 class BlackList(models.Model):
     ip = models.GenericIPAddressField()
     created_at = models.DateTimeField(editable=False, default=timezone.now)
