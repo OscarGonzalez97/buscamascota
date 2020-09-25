@@ -12,6 +12,9 @@ def colaborate(request):
 def terms(request):
     return render(request,'terminos.html')
 
+def license(request):
+    return render(request,'licencia.html')
+
 def map(request):
     context={
         'report_type':REPORT_TYPE,
