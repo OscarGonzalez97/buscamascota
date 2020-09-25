@@ -29,5 +29,6 @@ def publish(request):
 
     context = {
         'form': form,
+        'messages': msg,
     }
     return render(request,'publicar.html', context)
