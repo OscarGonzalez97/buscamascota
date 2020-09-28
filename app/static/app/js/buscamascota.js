@@ -36,7 +36,7 @@ function initMap(mapDivId,isIndex) {
 
 function completeUbicationWidgets(latitude, longitude){
     /**
-    * Complete widgets (country, postal_code,city, address, ubication_resume) from the form related with ubication when click.
+    * Complete widgets (country, postal_code,city, address, ubication_resume) from the form related with ubication when clicked.
     * @param latitude: latitude of marker when click
     * @param longitude: longitude of marker when click
     **/
@@ -70,4 +70,16 @@ function completeUbicationWidgets(latitude, longitude){
     };
     xhttp.open("GET", url, true);
     xhttp.send();
+}
+
+function enableSubmit(){
+    /**
+    * Enable submit button of the form when accept terms of use or disable when not, depends on checkbox.
+    **/
+    if(document.getElementById("id_accept_terms").checked){
+        document.getElementById("submitButton").disabled = false;
+    }
+    else{
+        document.getElementById("submitButton").disabled = true;
+    }
 }
