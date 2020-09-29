@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from app.constants import REPORT_TYPE, SPECIE
 from app.forms import ReportForm
+from django.contrib import messages
 
 def index(request):
     return render(request,'index.html')
@@ -23,15 +24,33 @@ def map(request):
     return render(request,'map.html', context)
 
 def publish(request):
-    msg = ''
-    registration_error = -1
-    created = False
-    form = ReportForm(request.POST or None)
-    
-    #if request.method == "POST":
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ReportForm(request.POST, request.FILES)
+        # check whether it's valid:
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.who_sent = request.META['REMOTE_ADDR']
+            instance.save()
+            messages.success(request, "Reporte creado con éxito!")
+            #publish at Twitter
+            #publish at Facebook
+            #publish at Instagram
+            #create PDF
+        else:
+            try:
+                if not form.cleaned_data['latitude'] or not form.cleaned_data['longitude']:
+                    print(form.cleaned_data)
 
-    context = {
-        'form': form,
-        'messages': msg,
-    }
-    return render(request,'publicar.html', context)
+            except e:
+                print(e)
+                messages.error(request, "Es necesario una ubicación, por favor marque un punto en el mapa")
+            
+
+    else:
+        form = ReportForm()
+        
+    context = {'form': form}
+
+    return render(request, 'publicar.html', context)

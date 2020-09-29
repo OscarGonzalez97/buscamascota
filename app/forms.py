@@ -28,7 +28,8 @@ class ReportForm(forms.ModelForm):
         'last_time_seen',
         'latitude',
         'longitude',
-        'accept_terms'
+        'accept_terms',
+        'who_sent'
         )
         labels = {
             'report_type': mark_safe('<b>Tipo de reporte * </b>'),
@@ -107,9 +108,17 @@ class ReportForm(forms.ModelForm):
             ),
             'latitude': forms.HiddenInput(),
             'longitude': forms.HiddenInput(),
-            'accept_terms': forms.CheckboxInput(),
+            'accept_terms': forms.CheckboxInput(
+                attrs={
+                    'onclick': "enableSubmit();"
+                }
+            ),
+            'who_sent': forms.HiddenInput(),
         }
         help_texts  = {
             'report_type' : mark_safe("<small><ul><li><b>Perdido</b>: Si perdiste o alguien perdió su mascota y quieres reportarla como perdida.</li><li><b>Avistamiento</b>: Si viste una mascota que parecía perdida, pero no pudiste retenerla.</li><li><b>Retenido</b>: Si encontraste una mascota y pudiste retenerla o sabes de alguien que la tiene retenida.</li><li><b>Otro</b>: Otro tipo de reporte.</li></ul></small>"),
             'picture': mark_safe("<br><small>Se necesita una imagen de la mascota para evitar confusiones y que sea más sencillo reconocerla</small>")
         }
+        # error_messages = {
+        
+        # }

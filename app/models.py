@@ -24,15 +24,15 @@ class Report(models.Model):
     edited_at = models.DateTimeField(null=True, blank=True)
     last_time_seen = models.DateField()
     accept_terms = models.BooleanField(default=False)
-    who_sent = models.GenericIPAddressField()
+    who_sent = models.GenericIPAddressField(null=True, blank=True)
     
-    # def save(self, *args, **kwargs):
-    #     # On save, update timestamps
-    #     if not self.id:
-    #         self.created_at = timezone.now()
-    #         self.report_state = False
-    #     self.edited_at = timezone.now()
-    #     return super(Report, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # On save, update timestamps
+        if not self.id:
+            self.created_at = timezone.now()
+            self.report_state = False
+        self.edited_at = timezone.now()
+        return super(Report, self).save(*args, **kwargs)
 
 class BlackList(models.Model):
     ip = models.GenericIPAddressField()
