@@ -17,22 +17,27 @@ class Report(models.Model):
     postal_code = models.CharField(max_length=50, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     address = models.CharField(max_length=300, null=True, blank=True)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(blank=True)
+    longitude = models.FloatField(blank=True)
     report_state = models.BooleanField(default=False, db_index=True)
     created_at = models.DateTimeField(editable=False, default=timezone.now)
     edited_at = models.DateTimeField(null=True, blank=True)
     last_time_seen = models.DateField()
     accept_terms = models.BooleanField(default=False)
     who_sent = models.GenericIPAddressField(null=True, blank=True)
+    allowed = models.BooleanField(default=True)
     
     def save(self, *args, **kwargs):
         # On save, update timestamps
         if not self.id:
             self.created_at = timezone.now()
             self.report_state = False
+            self.allowed = True
         self.edited_at = timezone.now()
         return super(Report, self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.report_type
 
 class BlackList(models.Model):
     ip = models.GenericIPAddressField()
