@@ -39,6 +39,12 @@ h1, h2, h3, h4, h5, h6,
   background-color: #cccccc;
   height : 100%;  
 }
+/*image resize*/
+#reportImage{
+  width: 70%%;
+  object-fit: cover;
+  height: 500px; /* only if you want fixed height */
+}
 
 .big-checkbox {width: 60px; height: 60px;}
 
