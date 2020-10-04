@@ -1,12 +1,8 @@
 from django import forms
 from app.constants import REPORT_TYPE, SPECIE, SEX
-from app.models import Report
+from app.models import Report, ReportImage
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
-
-# REPORT_TYPE_EMPTY = [('','Indique el tipo de reporte')] + list(SPECIE)
-# SPECIE_EMPTY = [('','Indique especie')] + list(SPECIE)
-# SEX_EMPTY = [('','Sexo del animal')] + list(SEX)
 
 class ReportForm(forms.ModelForm):
     class Meta:
@@ -116,9 +112,17 @@ class ReportForm(forms.ModelForm):
             'who_sent': forms.HiddenInput(),
         }
         help_texts  = {
-            'report_type' : mark_safe("<small><ul><li><b>Perdido</b>: Si perdiste o alguien perdió su mascota y quieres reportarla como perdida.</li><li><b>Avistamiento</b>: Si viste una mascota que parecía perdida, pero no pudiste retenerla.</li><li><b>Retenido</b>: Si encontraste una mascota y pudiste retenerla o sabes de alguien que la tiene retenida.</li><li><b>Otro</b>: Otro tipo de reporte.</li></ul></small>"),
+            'report_type' : mark_safe("<small><ul><li><b>Perdido</b>: Si perdiste o alguien perdió su mascota y quieres reportarla como perdida.</li><li><b>Avistado</b>: Si viste una mascota que parecía perdida, pero no pudiste retenerla.</li><li><b>Retenido</b>: Si encontraste una mascota y pudiste retenerla o sabes de alguien que la tiene retenida.</li><li><b>Otro</b>: Otro tipo de reporte.</li></ul></small>"),
             'picture': mark_safe("<br><small>Se necesita una imagen de la mascota para evitar confusiones y que sea más sencillo reconocerla</small>")
         }
         # error_messages = {
         
         # }
+
+class ReportSucessForm(forms.ModelForm):
+    class Meta:
+        model = ReportImage
+        fields = ('picture','report_id')
+        widgets = {'picture': forms.FileInput(), 
+            'report_id':forms.HiddenInput(),
+        }

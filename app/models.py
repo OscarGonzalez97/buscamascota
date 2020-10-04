@@ -42,3 +42,8 @@ class Report(models.Model):
 class BlackList(models.Model):
     ip = models.GenericIPAddressField()
     created_at = models.DateTimeField(editable=False, default=timezone.now)
+
+class ReportImage(models.Model):
+    picture = models.ImageField(upload_to='reports', blank=True)
+    report_id = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True)
+    created_at = models.DateTimeField(editable=False, default=timezone.now)

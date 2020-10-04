@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+    {% if messages %}
+        <div class="row">
+            <div class="col-lg-10 col-sm-offset-3">
+            {% include 'messages.html' %}
+            </div>
+        </div>
+    {% else %}
+        <script src="{% static 'app/js/html2canvas.min.js' %}"></script>
+
+        <h1 class="text-center text-success"> <i class="fas fa-check"></i> Reporte #{{report_id}} creado con &eacute;xito!</h1>
+        <h4 class="text-center text-muted">El ID de su reporte es: <b class="text-success font-weight-bold">{{report_id}}</b>, guarde este identificador para futuras modificaciones o consultas.</h4>
+        
+        <!--HTML report, later saved to an image-->
+        <div class="container-fluid border border-info" id="report">
+            <h2 class="text-center text-uppercase display-2" style="font-family: 'Montserrat', sans-serif; color: red;"> {{specie}} {{report_type}} </h2>
+            <br>
+            <div class="text-center">
+                <img id="reportImage" src="{{image}}" class="text-center border border-warning" alt="mascota perdida">
+            </div>
+            <br>
+            <div class="col-7 mx-auto">
+                <div class="text-center">
+                    <h4 class="text-center">{{description}}. {% if age %} Tiene aprox.: {{age}} años. {% endif %} {% if sex %} Sexo: {{sex}}. {% endif %}</h4>
+                    <h4 class="text-center">&Uacute;lt. vez visto el {{last_time_seen|date:"d/m/Y"}}</h4>
+                    <h5 class="text-center">Ubicaci&oacute;n: {{ubication_resume}}.</h5>
+                    {% if name %}
+                        <h4 class="text-center">Contactar a: {{name}}</h4>
+                    {% endif %}
+                    {% if phone %}
+                        <h4 class="text-center">Tel.: {{phone}}</h4>
+                    {% endif %}
+                </div>
+            </div>
+            <p class="text-center">Reporte creado en <a href="http://buscamascota.org" target="_blank">buscamascota.org</a></p>
+        </div>
+        <br>
+        <div class="center">
+            <a  id="link" class="btn btn-success btn-block" role="button"> <i class="fas fa-download"></i>  Exportar reporte como imagen!</a>
+        </div>
+        <br>
+        <p>La informaci&oacute;n proporcionada fue publicada en este sitio web, puede ver el reporte completo <a href="http://{{url}}" target="_blank">aqu&iacute;</a>, tambi&eacute;n fue publicada en las distintas redes sociales de la p&aacute;gina.</p>
+        
+        <form method="POST" enctype="multipart/form-data" id="form">
+            {% csrf_token %}
+            {{form.as_p}}
+        </form>
+
+        <script>
+        
+        window.onload = function() {
+            //dom not only ready, but everything is loaded
+            html2canvas(document.getElementById("report")).then(canvas => {
+                let image = canvas.toDataURL("image/png");
+                let link = document.getElementById('link');
+                //put the image in #link for the client
+                link.setAttribute('download', 'buscaMascotaReporte{{report_id}}.png');
+                link.setAttribute('href',image);
+            });
+
+            document.getElementById("id_report_id").value = {{report_id}};
+            
+             var fr = new FileReader();
+            fr.onload = function () {
+                document.getElementById('id_picture').src = fr.result;
+            }
+            fr.readAsDataURL(image);
+            document.getElementById('id_picture').src = fr.result;
+            document.getElementById("form").submit(); 
+        };            
+        </script>
+
+    {% endif %}
+</div>
+{% endblock %}
