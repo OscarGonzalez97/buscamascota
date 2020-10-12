@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from app.constants import REPORT_TYPE, SPECIE
 from app.forms import ReportForm, ReportSucessForm
-from app.utils import tweet
+from app.utils import tweet, post_instagram_facebook
 from app.models import BlackList, Report, ReportImage
 from django.contrib import messages
 import sys
+import urllib
 
 
 def index(request):
@@ -41,6 +42,7 @@ def publish(request):
                 if not BlackList.objects.filter(ip=instance.who_sent).exists():
                     instance.save()
                     report_id = str(instance.id)
+                    request.session['pp_publish'] = True
                     #redirect to another view where is the report id
                     return redirect('success', report_id=report_id)
                 else:
@@ -62,18 +64,25 @@ def success(request, report_id):
     specie = image = description =  last_time_seen = ubication_resume = name = phone = sex = url = ''
 
     reportImageExist = ReportImage.objects.filter(report_id=report_id).exists()
-
     form = ReportSucessForm()
 
     
-    if request.method == 'POST':
+    if request.method == 'POST' and ('pp_publish' in request.session):
         # create a form instance and populate it with data from the request:
-        form = ReportSucessForm(request.POST, request.FILE)
+        form = ReportSucessForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            data = form.cleaned_data['datauri']
+            response = urllib.request.urlopen(data)
+            path_reports = 'media/reports/report'+ str(report_id)+ '.png'
+            with open(path_reports, 'wb') as f:
+                f.write(response.file.read())
+            instance.picture = path_reports
+            instance.save()
             reportImageExist = True
             print('I save the report image!')
+            del request.session['pp_publish']
 
         
     try:
@@ -98,10 +107,9 @@ def success(request, report_id):
         if reportImageExist:
             reportImage = ReportImage.objects.get(report_id=report_id)
             #publish at Twitter
-            tweet(report.report_type, report.country, report.title, reportImage.picture.url, url)
-            #publish at Facebook
-
-            #publish at Instagram
+            # tweet(report.report_type, report.country, report.title, reportImage.picture, url)
+            #publish at Instagram & Facebook
+            # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
         
     except:
         print("Oops!", sys.exc_info()[0], "occurred.")
@@ -123,5 +131,6 @@ def success(request, report_id):
         'form': form,
         'reportImageExist': reportImageExist
     }
-
     return render(request, 'exito.html', context)
+
+    

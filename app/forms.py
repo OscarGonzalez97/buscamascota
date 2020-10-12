@@ -120,9 +120,10 @@ class ReportForm(forms.ModelForm):
         # }
 
 class ReportSucessForm(forms.ModelForm):
+    datauri = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = ReportImage
         fields = ('picture','report_id')
-        widgets = {'picture': forms.FileInput(), 
+        widgets = {'picture': forms.HiddenInput(), 
             'report_id':forms.HiddenInput(),
         }
