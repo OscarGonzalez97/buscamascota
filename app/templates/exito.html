@@ -60,17 +60,15 @@
                 //put the image in #link for the client
                 link.setAttribute('download', 'buscaMascotaReporte{{report_id}}.png');
                 link.setAttribute('href',image);
+                {% if not reportImageExist %}
+                    document.getElementById("id_report_id").value = {{report_id}};
+                    document.getElementById('id_datauri').value = image;
+                    document.getElementById("form").submit();
+                {% endif %} 
             });
-
-            document.getElementById("id_report_id").value = {{report_id}};
             
-             var fr = new FileReader();
-            fr.onload = function () {
-                document.getElementById('id_picture').src = fr.result;
-            }
-            fr.readAsDataURL(image);
-            document.getElementById('id_picture').src = fr.result;
-            document.getElementById("form").submit(); 
+            
+            
         };            
         </script>
 
