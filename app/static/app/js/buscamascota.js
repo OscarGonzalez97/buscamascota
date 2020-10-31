@@ -22,7 +22,7 @@ function initMap(mapDivId,isIndex) {
             fullscreenControl: true,
             // OR
             fullscreenControl: {
-                pseudoFullscreen: false // if true, fullscreen to page width and height
+                pseudoFullscreen: false
             },
             minZoom: 2
         }).setView([-23.3165935,-58.1693445], 6); //Paraguay's coordenates
