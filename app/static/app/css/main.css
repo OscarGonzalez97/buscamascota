@@ -2,6 +2,18 @@
 /* el celeste es este  #65CAD5*/
 /* el amarillo es este #FFD933*/
 
+.amarillo{
+  background-color: #FFD933;
+}
+
+.celeste{
+  background-color: #65CAD5;
+}
+
+.bg-clear{
+  background-color: #ecf4f585;
+}
+
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
     margin-bottom: 0.5rem;
@@ -38,17 +50,44 @@ h1, h2, h3, h4, h5, h6,
 }
 
 
-#imagenDonacion {
-  background: url('../img/baner.jpg');
+.img-full {
+  height: 500px;
+  background-image: url('../img/principal1.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
   background-size: cover;
-  background-color: #cccccc;
-  height : 100%;  
 }
+
+.img-donate {
+  height: 500px;
+  background-image: url('../img/closeup-shot-of-the-snouts-of-cute-dog-and-cat-sitting-cheek-to-cheek.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover
+}
+
+ul li {
+  padding: 5px 0px 5px 0px;
+}
+
 /*image resize*/
 #reportImage{
-  width: 70%;
+  width: 60%;
   object-fit: cover;
-  height: 70%x; /* only if you want fixed height */
+  height: 60%; /* only if you want fixed height */
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex > #divMapListView{
+  order: 1;
+}
+
+.flex > #divListView{
+  order: 2;
 }
 
 /*For the Leaflet Map*/
