@@ -12,7 +12,14 @@ def tweet(report_type, country, title, filename, url):
     # CONSUMER_SECRET = config('TWITTER_CONSUMER_SECRET') 
     # ACCESS_KEY = config('TWITTER_ACCESS_KEY')
     # ACCESS_SECRET = config('TWITTER_ACCESS_SECRET')
+<<<<<<< HEAD
  
+=======
+    CONSUMER_KEY='CBLR701aqALxW22ZQMzITeirh'
+    CONSUMER_SECRET='GmNbAxkSiHHmDMZkoBc7X8EalYuV2RmLdCDgXmMEfo7SEmsOBQ'
+    ACCESS_KEY='1307068342042324993-26IGVEFG1qbl6HsOWTYI9h9nECBbAR'
+    ACCESS_SECRET='LhKLpFBODLjd2rSLQPKkEXluLokwt6nson6Go5GKEeVRc'
+>>>>>>> bb9624b98f54621ac1198d4d6e26e3c4db9c9d14
 
 
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
