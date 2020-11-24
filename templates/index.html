@@ -3,57 +3,76 @@
 {% block content %}
 <script>
     {% block javascript %}
-    //leaflet map
-    var map = initMap('map', true);
-
-    //var markers = L.markerClusterGroup(); // Leaflet's cluster group
-
-    //addMarkers({{ scientists|safe }}, true, map, markers);    
-    
 
     {% endblock %}
 </script>
-<!-- Masthead -->
-<header class="text-center">
-    <div class="container-fluid px-0" >
-        <div id="map">
+<!--Principal section-->
+<section class="page-section bg-secondary text-white mb-0" id="principal">
+    <div class="img-full">
+        <div class="row pt-5">
+            <div class="col-lg-6 ml-auto pt-5" style="margin-top: 40px;">        
+                
+            </div>
+            <div class="col-lg-4 ml-auto py-5 text-center" style="margin-top: 40px;">
+                <h4 class="page-section-heading text-center text-dark bg-clear"> Busca Mascota es una plataforma open-source, para que mascotas perdidas se reencuentren con sus dueños.<br/> 
+                </h4>
+                <h3 class="page-section-heading text-center text-dark">
+                    <a class="btn btn-warning btn-lg mt-2 amarillo" href="{% url 'map' %}" >
+                        Buscar mi mascota
+                    </a>
+                    <a class="btn btn-outline-dark btn-lg mt-2 ml-1" href="{% url 'publicar' %}" >
+                        Publicar mascota
+                    </a>
+                </h3>
+            </div>
         </div>
     </div>
-</header>
+</section>
 <!--Para Quien Section-->
 <section class="page-section bg-secondary text-white mb-0" id="paraQuien">
-    <div class="row">
-        <div class="col-lg-6 text-center" style="background-color: #65CAD5;">
-            <h2 class="page-section-heading text-center text-light">Qui&eacute;n puede utilizar el sitio?</h2> 
-            <h4 class="page-section-text text-center text-light"> {% lorem 2 b random %}</h4>
+    <div class="row amarillo">
+        <div class="col-lg-6 " style="margin-top: 100px;">
+            <h2 class="page-section-heading text-center text-dark mt-5" >Qui&eacute;n puede utilizar el sitio?</h2> 
+            <h4 class="page-section-text text-dark mt-5 ml-3"> 
+                <ul>
+                    <li>Personas que han perdido su mascota y desean publicar un reporte o buscar su mascota.</li>
+                    <li>Personas que han encontrado o avistado una mascota que parec&iacute;a perdida y desean publicar un reporte.</li>
+                </ul>
+            </h4>
+            <h4 class="page-section-text text-center text-dark mt-5 ml-3"> 
+                Todo con el fin de que estas puedan reencontrarse con sus dueños. 
+            </h4>
         </div>
-        <div class="col-lg-6 text-center py-5" style="background-color: #65CAD5;">
+        <div class="col-lg-6 text-center py-5 amarillo">
             <img src="{% static 'app/img/paw-five.jpg' %}" class="img-fluid" alt="Man and dog">
         </div>
     </div>
 </section>
 <!--ElPorque Section-->
-<section class="page-section bg-secondary text-white mb-0" id="elPorque">
+{% comment %} <section class="page-section bg-secondary text-white mb-0" id="elPorque">
     <div class="row">
-        <div class="col-lg-6 text-center py-5" style="background-color: #FFD933;">
+        <div class="col-lg-6 text-center py-5 amarillo">
             <img src="{% static 'app/img/153.jpg' %}" class="img-fluid" alt="Girl and dog">    
         </div>
-        <div class="col-lg-6 text-center" style="background-color: #FFD933;">
+        <div class="col-lg-6 text-center amarillo">
             <h2 class="page-section-heading text-center text-dark">Porqu&eacute; del sitio</h2>  
-            <h4 class="page-section-text text-center text-dark">{% lorem 3 b random %} </h4>
+            <h4 class="page-section-text text-center text-dark mt-3"> </h4>
         </div>
     </div>
-</section>
+</section> {% endcomment %}
 <!--Donate Section-->
 <section  class="page-section bg-secondary text-white mb-0">
-    <div class="row" id="imagenDonacion">
-        <div class="col-lg-6 ml-auto py-5">        
-            <h4 class="page-section-heading text-center text-light">Puedes colaborar <br/> para que este sitio siga activo <br/> y funcionando siempre</h4>
-        </div>
-        <div class="col-lg-4 ml-auto py-5 text-center">        
-            <a class="btn btn-info btn-lg" href="{% url 'colaborar' %}" >
-                Colaborar
-            </a>
+    <div class="img-donate">
+        <div class="row pt-5">
+            <div class="col-lg-6 ml-auto pt-5" style="margin-top: 40px;">        
+                <h4 class="page-section-heading text-center text-light">Puedes colaborar <br/> para que este sitio siga activo <br/> y funcionando siempre <br/> 
+                    <a class="btn btn-info btn-lg mt-2" href="{% url 'colaborar' %}" >
+                        Colaborar
+                    </a>
+                </h4>
+            </div>
+            <div class="col-lg-4 ml-auto py-5 text-center" style="margin-top: 40px;">        
+            </div>
         </div>
     </div>
 </section>
