@@ -3,69 +3,72 @@
 <script>
 {% block javascript %}
     //leaflet map
-    var map = initMap('map',false);
+    var map = initMap('map');
+
+    var markers = L.markerClusterGroup(); // Leaflet's cluster group
+
+    addMarkers({{ reports | safe }} , map, markers);
+    
+    changeView();
 
 {% endblock %}
 </script>
 
 {% block content %}
-<div class="container">
-    <div class="row align-items-center mb-3 mt-3 justify-content-center ">
-        <form class="form-inline" method="POST" id="filter">
-            {% csrf_token %}
-            <label class="my-1 mr-2" for="report_type">Tipo de reporte: </label>
-            <select class="custom-select my-1 mr-sm-2" id="report_type">
-                <option selected value="">Todos</option>
-                {% for report_key, report_value in report_type %}
-                    <option value="{{ report_key }}">{{ report_value }}</option>
-                {% endfor %}
-            </select>
-            <label class="my-1 mr-2" for="specie">Especie: </label>
-            <select class="custom-select my-1 mr-sm-2" id="specie">
-                <option value="" selected>Todas</option>
-                {% for specie_key, specie_value in specie %}
-                    <option value="{{ specie_key }}">{{ specie_value }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit" class="btn btn-primary my-1">Buscar</button>
-        </form>
+    <div class="container text-center">
+        <div class="row align-items-center mb-3 mt-3 mx-2 justify-content-lg-center">
+            <form class="form-inline" method="POST" id="filter">
+                {% csrf_token %}
+                <label class="my-1 mr-2" for="report_type">Tipo de reporte: </label>
+                <select class="custom-select my-1 mr-sm-2" id="report_type">
+                    <option selected value="">Todos</option>
+                    {% for report_key, report_value in report_type %}
+                        <option value="{{ report_key }}">{{ report_value }}</option>
+                    {% endfor %}
+                </select>
+                <label class="my-1 mr-2" for="specie">Especie: </label>
+                <select class="custom-select my-1 mr-sm-2" id="specie">
+                    <option value="" selected>Todas</option>
+                    {% for specie_key, specie_value in specie %}
+                        <option value="{{ specie_key }}">{{ specie_value }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary my-1">Buscar</button>
+            </form>
+        </div>
     </div>
-</div>
+    <div class="container text-center">
+        <div class="row justify-content-lg-center mx-2">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                {% if viewList %}
+                    <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >
+                        <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();" checked>  <i class="fas fa-map-marked-alt"></i>
+                    </label>
+                    <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de lista">
+                        <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();"> <i class="fas fa-list"></i>  
+                    </label>
+                {% else %}
+                    <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >
+                        <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();">  <i class="fas fa-map-marked-alt"></i>
+                    </label>
+                    <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de lista">
+                        <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();" checked> <i class="fas fa-list"></i>  
+                    </label>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
 <br/>
-<div class="container-fluid">
-    <div class="row mb-3">
-        <div class="col-6">
+<div class="container-fluid flex">
+    <div class="row mb-3" id="divMapView">
+        <div class="col-12">
             <div id="map"></div>
         </div>
-        <div class="col-6">
-            <div class="panel panel-default border">
-                <div class="panel-heading bg-dark text-light">Panel Heading</div>
-                <div class="panel-body">
-                    <ul class="list-unstyled">
-                    <li class="media">
-                        <img class="mr-3" src="http://placekitten.com/100/100" alt="Generic placeholder image">
-                        <div class="media-body">
-                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        </div>
-                    </li>
-                    <li class="media my-4">
-                        <img class="mr-3" src="http://placekitten.com/100/100" alt="Generic placeholder image">
-                        <div class="media-body">
-                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        </div>
-                    </li>
-                    <li class="media">
-                        <img class="mr-3" src="http://placekitten.com/100/100" alt="Generic placeholder image">
-                        <div class="media-body">
-                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        </div>
-                    </li>
-                    </ul>
-                </div>
-            </div>
+    </div>
+    <div class="row mb-3" id="divListView">
+        <div class="col-12">
+            {% include 'mapListView.html' %}
         </div>
     </div>
 </div>

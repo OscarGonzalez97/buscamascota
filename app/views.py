@@ -5,12 +5,40 @@ from app.forms import ReportForm, ReportSucessForm
 from app.utils import tweet, post_instagram_facebook
 from app.models import BlackList, Report, ReportImage
 from django.contrib import messages
+from django.core.serializers.json import DjangoJSONEncoder
 import sys
 import urllib
-
+import json
+from django.core.paginator import Paginator
 
 def index(request):
-    return render(request,'index.html')
+    reports = __getReports()
+    context = { 'reports': json.dumps(reports, cls=DjangoJSONEncoder) }
+    return render(request,'index.html', context)
+
+def __getReports():
+    query = {'allowed': True}
+
+    report_objs = Report.objects.filter(**query)
+    reports = []
+
+    for report_obj in report_objs:
+        reports.append(
+        {'id' : report_obj.id,
+        'report_type' : report_obj.report_type,
+        'title' : report_obj.title,
+        'description' : report_obj.description,
+        'name' : report_obj.name,
+        'phone' : report_obj.phone,
+        'specie' : report_obj.specie,
+        'age' : report_obj.age, 
+        'sex' : report_obj.sex, 
+        'ubication_resume' : report_obj.ubication_resume, 
+        'latitude' : report_obj.latitude, 
+        'longitude' : report_obj.longitude, 
+        'last_time_seen' : report_obj.last_time_seen,
+        'picture':report_obj.picture.url})    
+    return reports
 
 def colaborate(request):
     return render(request,'colaborar.html')
@@ -22,11 +50,55 @@ def license(request):
     return render(request,'licencia.html')
 
 def map(request):
-    context={
-        'report_type':REPORT_TYPE,
-        'specie': SPECIE
-    }
-    return render(request,'map.html', context)
+    if 'listView' in request.COOKIES:
+        listView = request.COOKIES['listView']
+        reports = __getReports()
+    
+        paginator = Paginator(reports, 25) # Show 25 reports per page.
+        
+        page_number = request.GET.get('page')
+
+        if (page_number == 0):
+            page_number=1
+        
+        page_obj = paginator.get_page(page_number)
+        
+        context={
+            'report_type':REPORT_TYPE,
+            'specie': SPECIE,
+            'reports': json.dumps(reports, cls=DjangoJSONEncoder),
+            'page_obj': page_obj,
+            'listView' : listView,
+        }
+        
+        response = render(request,'map.html', context)
+    else:
+        reports = __getReports()
+    
+        paginator = Paginator(reports, 25) # Show 25 reports per page.
+        
+        page_number = request.GET.get('page')   
+
+        if (page_number == 0):
+            page_number=1
+        
+        page_obj = paginator.get_page(page_number)
+
+        listView = False
+
+        context={
+            'report_type':REPORT_TYPE,
+            'specie': SPECIE,
+            'reports': json.dumps(reports, cls=DjangoJSONEncoder),
+            'page_obj': page_obj,
+            'listView' : listView,
+        }
+        
+        response = render(request,'map.html', context)
+        response.set_cookie(key='listView', value=False)
+
+    
+    return response
 
 def publish(request):
     # if this is a POST request we need to process the form data
@@ -38,15 +110,11 @@ def publish(request):
             if form.cleaned_data['latitude'] and form.cleaned_data['longitude']:
                 instance = form.save(commit=False)
                 instance.who_sent = request.META['REMOTE_ADDR']
-                #check if the ip exists in Blacklist table           
-                if not BlackList.objects.filter(ip=instance.who_sent).exists():
-                    instance.save()
-                    report_id = str(instance.id)
-                    request.session['pp_publish'] = True
-                    #redirect to another view where is the report id
-                    return redirect('success', report_id=report_id)
-                else:
-                   messages.error(request, "La IP se encuentra baneada debido a una publicación realizada. Póngase en contacto con el administrador del sitio.")
+                instance.save()
+                report_id = str(instance.id)
+                request.session['pp_publish'] = True
+                #redirect to another view where is the report id
+                return redirect('success', report_id=report_id)
             else:
                 messages.error(request, "Es necesario una ubicación, por favor marque un punto en el mapa")
         else:
