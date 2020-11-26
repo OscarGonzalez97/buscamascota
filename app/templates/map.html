@@ -15,9 +15,9 @@
 </script>
 
 {% block content %}
-    <div class="container text-center">
+    <div class="container">
         <div class="row align-items-center mb-3 mt-3 mx-2 justify-content-lg-center">
-            <form class="form-inline" method="POST" id="filter">
+            <form class="form-inline mx-auto" method="POST" id="filter">
                 {% csrf_token %}
                 <label class="my-1 mr-2" for="report_type">Tipo de reporte: </label>
                 <select class="custom-select my-1 mr-sm-2" id="report_type">
@@ -33,34 +33,34 @@
                         <option value="{{ specie_key }}">{{ specie_value }}</option>
                     {% endfor %}
                 </select>
-                <button type="submit" class="btn btn-primary my-1">Buscar</button>
+                <button type="submit" class="btn btn-primary my-1 mx-auto">Buscar</button>
             </form>
         </div>
     </div>
-    <div class="container text-center">
+    <div class="container mx-auto">
         <div class="row justify-content-lg-center mx-2">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                {% if viewList %}
+            <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
+                {% comment %} {% if viewList %} {% endcomment %}
                     <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >
-                        <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();" checked>  <i class="fas fa-map-marked-alt"></i>
+                        <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();" >  <i class="fas fa-map-marked-alt"></i>
                     </label>
                     <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de lista">
-                        <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();"> <i class="fas fa-list"></i>  
+                        <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();" checked> <i class="fas fa-list"></i>  
                     </label>
-                {% else %}
+                {% comment %} {% else %}
                     <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >
                         <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();">  <i class="fas fa-map-marked-alt"></i>
                     </label>
                     <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de lista">
                         <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();" checked> <i class="fas fa-list"></i>  
                     </label>
-                {% endif %}
+                {% endif %} {% endcomment %}
                 
             </div>
         </div>
     </div>
 <br/>
-<div class="container-fluid flex">
+<div class="container-fluid flex mx-auto">
     <div class="row mb-3" id="divMapView">
         <div class="col-12">
             <div id="map"></div>

@@ -37,7 +37,9 @@ def __getReports():
         'latitude' : report_obj.latitude, 
         'longitude' : report_obj.longitude, 
         'last_time_seen' : report_obj.last_time_seen,
-        'picture':report_obj.picture.url})    
+        'picture':report_obj.picture.url,
+        'country':report_obj.country,
+        'city':report_obj.city})
     return reports
 
 def colaborate(request):
@@ -50,53 +52,26 @@ def license(request):
     return render(request,'licencia.html')
 
 def map(request):
-    if 'listView' in request.COOKIES:
-        listView = request.COOKIES['listView']
-        reports = __getReports()
+
+    reports = __getReports()
+
+    paginator = Paginator(reports, 15) # Show 25 reports per page.
     
-        paginator = Paginator(reports, 25) # Show 25 reports per page.
-        
-        page_number = request.GET.get('page')
+    page_number = request.GET.get('page')   
 
-        if (page_number == 0):
-            page_number=1
-        
-        page_obj = paginator.get_page(page_number)
-        
-        context={
-            'report_type':REPORT_TYPE,
-            'specie': SPECIE,
-            'reports': json.dumps(reports, cls=DjangoJSONEncoder),
-            'page_obj': page_obj,
-            'listView' : listView,
-        }
-        
-        response = render(request,'map.html', context)
-    else:
-        reports = __getReports()
+    if (page_number == 0):
+        page_number=1
     
-        paginator = Paginator(reports, 25) # Show 25 reports per page.
-        
-        page_number = request.GET.get('page')   
+    page_obj = paginator.get_page(page_number)
 
-        if (page_number == 0):
-            page_number=1
-        
-        page_obj = paginator.get_page(page_number)
-
-        listView = False
-
-        context={
-            'report_type':REPORT_TYPE,
-            'specie': SPECIE,
-            'reports': json.dumps(reports, cls=DjangoJSONEncoder),
-            'page_obj': page_obj,
-            'listView' : listView,
-        }
-        
-        response = render(request,'map.html', context)
-        response.set_cookie(key='listView', value=False)
-
+    context={
+        'report_type':REPORT_TYPE,
+        'specie': SPECIE,
+        'reports': json.dumps(reports, cls=DjangoJSONEncoder),
+        'page_obj': page_obj,
+    }
+    
+    response = render(request,'map.html', context)
     
     return response
 
