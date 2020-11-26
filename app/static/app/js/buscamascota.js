@@ -58,7 +58,11 @@ function generateInfoWindowContent(report_info) {
     content += "<img src='"+report_info.picture+"' alt='mascota' style='width: 100%; height: 100%;'>";
     if (report_info.phone != null) 
         content += "<p class='text-center h6'> Contacto: " + report_info.phone + "</p>";
-    content += "<p class='text-center text-dark'> <a class=\"btn btn-warning mt-1 amarillo\" href=\"http://buscamascota.org/reporte/"+ report_info.id +"\"> Ver reporte completo </a>  </p>"
+    if (report_info.city != null) 
+        content += "<p class='text-center h6'>" + report_info.city + "," + report_info.country + "</p>";
+    else
+    content += "<p class='text-center h6'>" + report_info.country + "</p>";
+    content += "<p class='text-center'> <a class=\"btn btn-warning mt-1 amarillo\" href=\"http://buscamascota.org/reporte/"+ report_info.id +"\"> Ver reporte completo </a>  </p>"
     return content
 }
 
