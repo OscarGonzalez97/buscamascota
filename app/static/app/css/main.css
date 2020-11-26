@@ -90,6 +90,11 @@ ul li {
   order: 2;
 }
 
+.list-report{
+    width: 100%;
+    height: auto;
+}
+
 /*For the Leaflet Map*/
 .map {
   position: relative;
