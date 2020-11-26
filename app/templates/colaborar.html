@@ -1,6 +1,52 @@
 {% extends 'base.html' %}
 {% block content %}
-<div>
-    <h1> hola!</h1>
+{% load static %}
+<div class="container">
+    <div class="row">
+        <h1> Puedes colaborar de distintas formas con este proyecto! </h1>
+    </div>
+    <div class="row mt-5">
+        <h2>Contribuir con el código en <i class="fab fa-github"></i> </h2>
+        <p class="mt-2"> Puedes colaborar a mejorar el sitio creando un pull-request al <a href="https://github.com/OscarGonzalez97/buscamascota/tree/develop"> repositorio </a> 
+        con alguna característica nueva o puedes descargar el código y realizar otra implementación.</p>
+        <h2> Puedes donar para que el sitio siga activo  <i class="fas fa-hand-holding-usd text-success"></i> </h2>
+        <p class="mt-2"> Busca Mascota actualmente se encuentra alojado en Google Cloud con la tarjeta de crédito del autor de la web, esto tiene un costo mensual que depende de la cantidad de uso que tenga Busca Mascota. </p>
+        <p> Si buscamos que este sitio siga activo y funcionando siempre puedes colaborar monetariamente para la causa, contribuyendo a que también el sitio se encuentre con constantes mejoras, actualizaciones, solución de problemas y soporte.</p>
+        <p> La prioridad de estas donaciones será la siguiente: </p>
+    </div>
+    <div class="row">
+        <ol>
+            <li> Pagar el alojamiento y la memoria en Google Cloud </li>
+            <li> Pagar el dominio buscamascota.org </li>
+            <li> Pagar el certificado SSL (candado de sitio seguro) </li>
+            <li> Pagar actualizaciones, mantenimiento y publicidades de las publicaciones </li>
+        </ol>
+    </div>
+    <div class="row">
+        <p> A continuación se dejará posibles medios para contribuir.</p>
+    </div>
+    <div class="row">
+        <div class="card" style="width: 17rem;">
+            <img class="card-img-top" src="{% static 'app/img/visionBanco.png' %}" width="268px" height="200px" alt="Card Vision Banco">
+            <div class="card-body">
+                <h5 class="card-title">Caja de Ahorro Vision Banco</h5>
+                <p class="card-text"> <b>Cuenta nro.: 4189747 </b></p>
+                <p class="card-text"> <b>Oscar Gonzalez </b></p>
+                <p class="card-text"> <b>CI: 4648960 </b></p>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem;">
+            <img class="card-img-top" src="{% static 'app/img/girosClaro.png' %}" width="268px" height="200px" alt="Card Giros Claro">
+            <div class="card-body">
+                <h5 class="card-title">Giros Claro</h5>
+                <p class="card-text"> <b>0986747136 (Claro)</b></p>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <h2>Compartiendo la página <i class="fas fa-bullhorn text-warning"></i> </h2>
+        <p>Puedes colaborar dando a conocer la página con familiares, amigos, conocidos o en las redes sociales! Dando a conocer una comunidad que se compromete con esta causa.</p>
+        <p>Mientras m&aacute;s personas conozcan Busca Mascota, m&aacute;s mascotras podr&aacute;n reencontrarse con sus dueños!
+    </div>
 </div>
 {% endblock %}
