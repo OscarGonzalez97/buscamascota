@@ -57,7 +57,7 @@ def map(request):
 
     paginator = Paginator(reports, 15) # Show 25 reports per page.
     
-    page_number = request.GET.get('page')   
+    page_number = request.GET.get('page')
 
     if (page_number == 0):
         page_number=1

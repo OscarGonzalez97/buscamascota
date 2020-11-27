@@ -120,12 +120,34 @@ function changeView(){
     if(document.getElementById("viewMap").checked){
         document.getElementById("divMapView").style.display = 'block';
         document.getElementById("divListView").style.display = 'none';
-    }
-    else if (document.getElementById("viewList").checked){
-        document.getElementById("divMapView").style.display = 'none';
-        document.getElementById("divListView").style.display = 'block';
+        document.cookie = "view=map";
     }
     else{
-
+        document.getElementById("divMapView").style.display = 'none';
+        document.getElementById("divListView").style.display = 'block';
+        document.cookie = "view=list";
     }
+}
+
+function readCookie(){
+    let cookies = document.cookie.split(";");
+    console.log(cookies);
+    for (i=0; i < cookies.length; i++) {
+        if (cookies[i].includes("view=map")){
+            console.log(cookies[i]);
+            document.getElementById("viewMap").checked = true;
+            //document.getElementById("viewList").checked = false;
+            return;
+        }
+        else{
+            console.log(cookies[i]);
+            //document.getElementById("viewMap").checked = false;
+            document.getElementById("viewList").checked = true;
+            return;
+        }
+            
+    }
+    //if finish the for and don't enter in the if, it means that the cookie does not exist so the default it's the map view
+    document.getElementById("viewMap").checked = true;
+    //document.getElementById("viewList").checked = false;
 }
