@@ -40,22 +40,12 @@
     <div class="container mx-auto">
         <div class="row justify-content-lg-center mx-2">
             <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
-                {% comment %} {% if viewList %} {% endcomment %}
-                    <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >
-                        <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();">  <i class="fas fa-map-marked-alt"></i>
-                    </label>
-                    <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de lista">
-                        <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();"> <i class="fas fa-list"></i>  
-                    </label>
-                {% comment %} {% else %}
-                    <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >
-                        <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();">  <i class="fas fa-map-marked-alt"></i>
-                    </label>
-                    <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de lista">
-                        <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();" checked> <i class="fas fa-list"></i>  
-                    </label>
-                {% endif %} {% endcomment %}
-                
+                <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >
+                    <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();">  <i class="fas fa-map-marked-alt"></i>
+                </label>
+                <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de lista">
+                    <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();"> <i class="fas fa-list"></i>  
+                </label>        
             </div>
         </div>
     </div>
