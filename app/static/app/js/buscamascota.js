@@ -3,7 +3,6 @@ function initMap(mapDivId) {
     /**
      Initialize leaflet Map in the DOM
      @param mapDivName: ID of the map's div in the DOM
-     @param isIndex: boolean to know if the map is Index page
       **/
     let map;
     map = L.map(mapDivId, {
