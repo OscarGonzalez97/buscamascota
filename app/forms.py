@@ -1,7 +1,6 @@
 from django import forms
 from app.constants import REPORT_TYPE, SPECIE, SEX
 from app.models import Report, ReportImage
-from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 
 class ReportForm(forms.ModelForm):
