@@ -11,16 +11,16 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link py-3 px-0 px-lg-3 nav-icon" href="{% url 'index' %}"> <h5><i class="fas fa-home"></i>  Home </h5><span class="sr-only">(current)</span></a>
+        <a class="nav-link py-3 px-0 px-lg-3 nav-icon" href="{% url 'index' %}"> <h5><i class="fas fa-home" {% if request.get_full_path == "/" %} style="color: #65CAD5;" {% endif %}></i>  Home </h5><span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link py-3 px-0 px-lg-3 nav-icon" href="{% url 'publicar' %}"> <h5><i class="fas fa-paw"></i>  Publicar Mascota </h5> <span class="sr-only"></span></a>
+        <a class="nav-link py-3 px-0 px-lg-3 nav-icon" href="{% url 'publicar' %}"> <h5><i class="fas fa-paw"  {% if request.get_full_path == "/publicar/" %} style="color: #65CAD5;" {% endif %}></i>  Publicar Mascota </h5> <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link py-3 px-0 px-lg-3 nav-icon" href="{% url 'map' %}"> <h5><i class="fas fa-search"></i>  Buscar Mascota </h5> <span class="sr-only"></span></a>
+        <a class="nav-link py-3 px-0 px-lg-3 nav-icon" href="{% url 'map' %}"> <h5><i class="fas fa-search" {% if request.get_full_path == "/map/" %} style="color: #65CAD5;" {% endif %}></i>  Buscar Mascota </h5> <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link py-3 px-0 px-lg-3 nav-icon" href="{% url 'colaborar' %}"> <h5><i class="fas fa-hands"></i>  Colaborar </h5> <span class="sr-only"></span></a>
+        <a class="nav-link py-3 px-0 px-lg-3 nav-icon" href="{% url 'colaborar' %}"> <h5><i class="fas fa-hands"  {% if request.get_full_path == "/colaborar/" %} style="color: #65CAD5;" {% endif %}></i>  Colaborar </h5> <span class="sr-only"></span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled  py-3 px-0 px-lg-3" href="#"> <h5><i class="fas fa-hand-holding-heart"></i>  Adopciones </h5></a>
