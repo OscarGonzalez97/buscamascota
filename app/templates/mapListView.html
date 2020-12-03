@@ -6,8 +6,8 @@
                     <div class="media">
                             <a href="{% url 'report' report_id=report.id %}"><img class="align-self-center mr-3 mt-1" width="100px" height="100px" src="{{report.picture}}" alt="report picture {{report.id}}"></a>
                             <div class="media-body">
-                                <a href="{% url 'report' report_id=report.id %}"><h5 class="mt-0 text-uppercase text-dark mr-2"> {% if report.specie == 'otro' %} ANIMAL {% else %} {{report.specie|upper}} {% endif %}  {{report.report_type|upper}}
-                                </h5></a>
+                                <h5 class="mt-0 text-uppercase text-dark mr-2"> <a href="{% url 'report' report_id=report.id %}">{% if report.specie == 'otro' %} ANIMAL {% else %} {{report.specie|upper}} {% endif %}  {{report.report_type|upper}}</a>
+                                </h5>
                                 <h6 class="mr-2">&Uacute;lt. vez visto el {{report.last_time_seen|date:"d/m/Y"}}</h6>
                                 <p class="mr-2">{{report.description}}.</p> {% if  report.phone %} <p class="mr-2"> Contacto:  {{report.phone}}</p> {% endif %}
                                 <p> {% if  report.city %} {{report.city}}, {% endif %} {{report.country}}</p>
