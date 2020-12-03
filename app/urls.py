@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from app import views
 from buscamascota import settings
 from django.contrib.staticfiles.urls import static
@@ -13,6 +13,7 @@ urlpatterns = [
     path('terminos/', views.terms, name='terminos'),
     path('licencia/', views.license, name='licencia'),
     path('exito/<int:report_id>', views.success, name='success'),
+    re_path(r'^reporte/(?P<report_id>[0-9]+)$', views.report, name='report'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
