@@ -9,6 +9,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 import sys
 import urllib
 import json
+from urllib.parse import urlencode
 from django.core.paginator import Paginator
 
 def index(request):
@@ -175,5 +176,80 @@ def success(request, report_id):
         'reportImageExist': reportImageExist
     }
     return render(request, 'exito.html', context)
+
+def report(request, report_id):
+
+    report_type = age = 0
+
+    specie = image = description =  last_time_seen = ubication_resume = name = phone = sex = created_at = reportImageDownloadable = latitude = longitude = url = text = ''
+
+    #report_id was created
+    reportExist = Report.objects.filter(id=report_id).exists()
+    
+    #This is the image of the report generated in the success view
+    reportImageExist = ReportImage.objects.filter(report_id=report_id).exists()
+
+    if reportExist:
+        try:
+            report = Report.objects.get(id=report_id, allowed=True)
+
+            if report.specie == 'otro':
+                specie = 'animal'
+            else:
+                specie = report.specie
+            
+            report_type = report.report_type
+            image = report.picture.url
+            description = report.description
+            age = report.age
+            last_time_seen = report.last_time_seen
+            ubication_resume = report.ubication_resume
+            name = report.name
+            phone = report.phone
+            sex = report.sex
+            created_at = report.created_at
+            latitude = report.latitude
+            longitude = report.longitude
+            url = "buscamascota.org/reporte/" + str(report_id)
+            text ="Conoces esta mascota? Echa un vistazo! " + url
+            mydict = {'text': text}
+            text = urlencode(mydict)
+
+        except:
+            print("Oops!", sys.exc_info()[0], "occurred.")
+            messages.error(request, "Error al recuperar reporte! Inténtelo más tarde o póngase en contacto con el administrador del sitio.")
+
+        try:
+            reportImage = ReportImage.objects.get(report_id=report_id)
+            path_reports = '/media/reports/report'+ str(report_id)+ '.png'
+            print("Path reports: ", path_reports)
+            reportImageDownloadable = path_reports
+        except:
+            messages.error(request, "La imagen del reporte no existe!")
+
+        context={
+        'report_id': report_id,
+        'report_type': report_type,
+        'specie': specie,
+        'image': image,
+        'description': description,
+        'age': age,
+        'last_time_seen': last_time_seen,
+        'ubication_resume': ubication_resume,
+        'name': name,
+        'phone': phone,
+        'sex': sex,
+        'reportExist': reportExist,
+        'created_at' : created_at,
+        'reportImageDownloadable' : reportImageDownloadable,
+        'latitude' : latitude,
+        'longitude' : longitude,
+        'url' : url,
+        'text' : text,
+        }
+        print(context)
+        return render(request, 'reporte.html', context)
+    else:
+        return render(request, '404.html')
 
     
