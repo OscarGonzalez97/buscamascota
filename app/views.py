@@ -1,25 +1,42 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
+from django.contrib import messages
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core.paginator import Paginator
 from app.constants import REPORT_TYPE, SPECIE
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.utils import tweet, post_instagram_facebook
 from app.models import BlackList, Report, ReportImage
-from django.contrib import messages
-from django.core.serializers.json import DjangoJSONEncoder
 import sys
 import urllib
 import json
 from urllib.parse import urlencode
-from django.core.paginator import Paginator
 
 def index(request):
-    reports = __getReports()
-    context = { 'reports': json.dumps(reports, cls=DjangoJSONEncoder) }
-    return render(request,'index.html', context)
+    return render(request,'index.html')
 
-def __getReports():
+def __getReports(report_type, specie, country, city, date_from, date_to):
     query = {'allowed': True}
+    
+    if report_type != '':
+        query['report_type'] = report_type
 
+    if specie != '':
+        query['specie'] = specie
+
+    if country != '':
+        query['country__icontains'] = country
+
+    if city != '':
+        query['city__icontains'] = city
+
+    if date_from != '' and date_to != '':
+        query['last_time_seen__range'] = (date_from,date_to)
+    elif date_to != '':
+        query['last_time_seen__lte'] = date_to 
+    elif date_from != '':
+        query['last_time_seen__gte'] = date_from 
+    
     report_objs = Report.objects.filter(**query)
     reports = []
 
@@ -53,16 +70,21 @@ def license(request):
     return render(request,'licencia.html')
 
 def map(request):
-
-    reports = __getReports()
-    
-
+    report_type = specie = country = city = date_from = date_to = ''
     if request.method == 'POST':
         form = FilterForm(request.POST)
         # if 'search' in request.POST:
+        if form.is_valid():
+            report_type = form.cleaned_data['report_type']
+            specie = form.cleaned_data['specie']
+            country = form.cleaned_data['country']
+            city = form.cleaned_data['city']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
     else:
         form = FilterForm()
 
+    reports = __getReports(report_type, specie, country, city, date_from, date_to)
 
     paginator = Paginator(reports, 15) # Show 15 reports per page.
     
@@ -74,8 +96,6 @@ def map(request):
     page_obj = paginator.get_page(page_number)
 
     context={
-        'report_type':REPORT_TYPE,
-        'specie': SPECIE,
         'reports': json.dumps(reports, cls=DjangoJSONEncoder),
         'page_obj': page_obj,
         'form': form,
@@ -158,7 +178,7 @@ def success(request, report_id):
         if reportImageExist:
             reportImage = ReportImage.objects.get(report_id=report_id)
             #publish at Twitter
-            # tweet(report.report_type, report.country, report.title, reportImage.picture, url)
+            tweet(report.report_type, report.country, report.title, reportImage.picture, url)
             #publish at Instagram & Facebook
             # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
         
