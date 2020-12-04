@@ -3,6 +3,9 @@ from app.constants import REPORT_TYPE, SPECIE, SEX
 from app.models import Report, ReportImage
 from django.utils.safestring import mark_safe
 
+REPORT_TYPE_ALL = (('','Todos'),) + REPORT_TYPE
+SPECIE_ALL = (('','Todas'),) + SPECIE
+
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
@@ -126,3 +129,11 @@ class ReportSucessForm(forms.ModelForm):
         widgets = {'picture': forms.HiddenInput(), 
             'report_id':forms.HiddenInput(),
         }
+
+class FilterForm(forms.Form):
+    report_type = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=REPORT_TYPE_ALL)
+    date_from = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Select a date', 'type':'date'}))
+    date_to = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Select a date', 'type':'date'}))
+    specie = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=SPECIE_ALL)
+    country = forms.CharField(widget = forms.TextInput(attrs={'class': 'form-control my-1 mr-sm-2'}))
+    city = forms.CharField(widget = forms.TextInput(attrs={'class': 'form-control my-1 mr-sm-2'}))

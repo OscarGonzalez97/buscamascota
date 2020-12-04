@@ -15,29 +15,29 @@
 </script>
 
 {% block content %}
-    <div class="container">
-        <div class="row align-items-center mb-3 mt-3 mx-2 justify-content-lg-center">
-            <form class="form-inline mx-auto" method="POST" id="filter">
+    <div class="container mx-auto amarillo shadow rounded">
+        <form class="form-inline justify-content-lg-center" method="POST" id="filter">
+            <div class="row align-items-center mb-3 mt-3 mx-2">
                 {% csrf_token %}
-                <label class="my-1 mr-2" for="report_type">Tipo de reporte: </label>
-                <select class="custom-select my-1 mr-sm-2" id="report_type">
-                    <option selected value="">Todos</option>
-                    {% for report_key, report_value in report_type %}
-                        <option value="{{ report_key }}">{{ report_value }}</option>
-                    {% endfor %}
-                </select>
-                <label class="my-1 mr-2" for="specie">Especie: </label>
-                <select class="custom-select my-1 mr-sm-2" id="specie">
-                    <option value="" selected>Todas</option>
-                    {% for specie_key, specie_value in specie %}
-                        <option value="{{ specie_key }}">{{ specie_value }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" class="btn btn-primary my-1 mx-auto">Buscar</button>
-            </form>
-        </div>
+                <label class="my-1 mx-2 font-weight-bold" for="report_type">Tipo de reporte: </label>
+                {{ form.report_type }}
+                <label class="my-1 mx-2 font-weight-bold" for="specie"> Fecha publicaci&oacute;n: </label>
+                {{form.date_from}}
+                <label class="my-1 mx-2 font-weight-bold" for="specie"> a </label>
+                {{form.date_to}}
+            </div>
+            <div class="row align-items-center mb-3 mt-3 mx-2">
+                <label class="my-1 mx-2 font-weight-bold" for="specie">Especie: </label>
+                {{form.specie}}
+                <label class="my-1 mx-2 font-weight-bold" for="specie"> Pa&iacute;s: </label>
+                {{form.country}}
+                <label class="my-1 mx-2 font-weight-bold" for="specie"> Ciudad: </label>
+                {{form.city}}
+                <button type="submit" name="search" class="btn btn-primary my-1 mx-auto">Buscar</button>
+            </div>
+        </form>
     </div>
-    <div class="container mx-auto">
+    <div class="container mx-auto mt-2">
         <div class="row justify-content-lg-center mx-2">
             <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
                 <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >

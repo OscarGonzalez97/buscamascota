@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from app.constants import REPORT_TYPE, SPECIE
-from app.forms import ReportForm, ReportSucessForm
+from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.utils import tweet, post_instagram_facebook
 from app.models import BlackList, Report, ReportImage
 from django.contrib import messages
@@ -55,8 +55,16 @@ def license(request):
 def map(request):
 
     reports = __getReports()
+    
 
-    paginator = Paginator(reports, 15) # Show 25 reports per page.
+    if request.method == 'POST':
+        form = FilterForm(request.POST)
+        # if 'search' in request.POST:
+    else:
+        form = FilterForm()
+
+
+    paginator = Paginator(reports, 15) # Show 15 reports per page.
     
     page_number = request.GET.get('page')
 
@@ -70,11 +78,10 @@ def map(request):
         'specie': SPECIE,
         'reports': json.dumps(reports, cls=DjangoJSONEncoder),
         'page_obj': page_obj,
+        'form': form,
     }
-    
-    response = render(request,'map.html', context)
-    
-    return response
+        
+    return render(request,'map.html', context)
 
 def publish(request):
     # if this is a POST request we need to process the form data
