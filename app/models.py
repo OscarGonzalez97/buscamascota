@@ -37,7 +37,7 @@ class Report(models.Model):
         return super(Report, self).save(*args, **kwargs)
     
     def __str__(self):
-        return self.report_type
+        return str(self.id)
 
 class BlackList(models.Model):
     ip = models.GenericIPAddressField()
