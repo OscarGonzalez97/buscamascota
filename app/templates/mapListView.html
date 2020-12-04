@@ -13,7 +13,7 @@
                                 <p> {% if  report.city %} {{report.city}}, {% endif %} {{report.country}}</p>
                                 <a class="btn btn-sm btn-warning mt-3 amarillo" href="{% url 'report' report_id=report.id %}"> Ver reporte completo</a>
                             </div>
-                            <i class="far fa-flag text-danger" data-toggle="tooltip" data-placement="top" title="Reportar reporte"></i>
+                            {% comment %} <i class="far fa-flag text-danger" data-toggle="tooltip" data-placement="top" title="Reportar reporte"></i> {% endcomment %}
                     </div>
                 </li>
             {% endfor %}
