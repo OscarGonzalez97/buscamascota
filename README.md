@@ -29,12 +29,14 @@
 
 # Instalacion / Installation (Ubuntu 18.04)
 * `sudo apt-get update`
-* `sudo apt-get install python3-pip libpq-dev postgresql postgresql-contrib`
-* `sudo - postgres psql` iniciamos sesion en el usuario de postgres y accedemos a la consola psql.
+* `sudo apt-get install python3-pip libpq-dev postgresql postgresql-contrib python3-venv`
+* `sudo passwd postgres` cambiar contraseña.
+* `su - postgres psql` iniciamos sesion en el usuario de postgres y accedemos a la consola psql.
 * `CREATE DATABASE buscamascota;` esto es en la consola psql para crear la base de datos.
 * `CREATE USER myuser WITH PASSWORD 'password';` para crear usuario (guardar datos para poner en archivo .env).
 * `GRANT ALL PRIVILEGES ON DATABASE buscamascota TO myuser;` damos privilegios al usuario que creamos.
 * `\q` salimos de la consola psql.
+* `logout` salimos de usuario postgres.
 * `python3 -m venv NAMEPROJECT` creamos un virtual enviroment.
 * `source NAMEPROJECT/bin/activate` activamos el virtual enviroment.
 * `git clone https://github.com/OscarGonzalez97/buscamascota.git`
@@ -44,5 +46,6 @@
 * `./scripts/prepare.sh`
 * Completar archivo .env con toda las variables creadas en pasos anteriores.
 * `pip3 install -r requirements.txt`
+* `python3 manage.py migrate`
 * `python3 manage.py runserver`
 * Ir a la dirección indicada y usar la aplicación.
