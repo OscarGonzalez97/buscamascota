@@ -1,6 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'app/css/cat.css' %}">
 <div class="container mt-8">
+    <div>
+        <div id="cat">
+            <div id="ears">
+                <div class="ear">
+                    <div class="ear_ref">
+                    </div>
+                </div>
+                <div class="ear">
+                    <div class="ear_ref">
+                    </div>
+                </div>
+            </div>
+            <div id="head">
+                <div id="eyes">
+                    <div class="eye">
+                        <div class="pupil">
+                            <div class="pupil_ref"></div>
+                        </div>
+                    </div>
+                    <div class="eye">
+                        <div class="pupil">
+                            <div class="pupil_ref"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="nose"></div>
+                <div id="baffi_dx">
+                    <div class="baffo"></div>
+                    <div class="baffo"></div>
+                    <div class="baffo"></div>
+                </div>
+                <div id="baffi_sx">
+                    <div class="baffo"></div>
+                    <div class="baffo"></div>
+                    <div class="baffo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <h1 class="text-center text-uppercase text-primary mt-5">Esta p&aacute;gina no existe!</h1>
 </div>
 {% endblock %}
