@@ -39,10 +39,6 @@ class Report(models.Model):
     def __str__(self):
         return str(self.id)
 
-class BlackList(models.Model):
-    ip = models.GenericIPAddressField()
-    created_at = models.DateTimeField(editable=False, default=timezone.now)
-
 class ReportImage(models.Model):
     picture = models.CharField(blank=True, max_length=300)
     report_id = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True)

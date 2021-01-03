@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from app.constants import REPORT_TYPE, SPECIE
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.utils import tweet, post_instagram_facebook
-from app.models import BlackList, Report, ReportImage
+from app.models import Report, ReportImage
 import sys
 import urllib
 import json
