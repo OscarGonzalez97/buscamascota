@@ -1,0 +1,108 @@
+
+/* el celeste es este  #65CAD5*/
+/* el amarillo es este #FFD933*/
+
+.amarillo{
+  background-color: #FFD933;
+}
+
+.celeste{
+  background-color: #65CAD5;
+}
+
+.bg-clear{
+  background-color: #ecf4f585;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-bottom: 0.5rem;
+  font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+#mainNav{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 700;
+}
+
+#navbar-primary.navbar-default {
+  background: transparent;
+  border: none;
+}
+
+.footer {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color:#60bfc9    ;
+  color: #fff;
+}
+
+.copyright {
+  background-color: #fff  ;
+}
+
+.nav-icon:hover .fas{
+  color: #65CAD5;
+}
+
+.img-full {
+  height: 500px;
+  background-image: url('../img/principal1.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.img-donate {
+  height: 500px;
+  background-image: url('../img/closeup-shot-of-the-snouts-of-cute-dog-and-cat-sitting-cheek-to-cheek.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover
+}
+
+ul li {
+  padding: 5px 0px 5px 0px;
+}
+
+/*image resize*/
+#reportImage{
+  width: 60%;
+  object-fit: cover;
+  height: 60%; /* only if you want fixed height */
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex > #divMapListView{
+  order: 1;
+}
+
+.flex > #divListView{
+  order: 2;
+}
+
+.list-report{
+    width: 100%;
+    height: auto;
+}
+
+/*For the Leaflet Map*/
+.map {
+  position: relative;
+  display:inline-block;
+}
+#map{
+  width: 100%;
+  height: 650px;
+}
+#map-report {
+  height: 400px;  /* The height is 400 pixels */
+}

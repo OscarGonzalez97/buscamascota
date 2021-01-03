@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+<script>
+{% block javascript %}
+    //leaflet map
+    let map = initMap('map-report');
+    L.control.locate({
+        initialZoomLevel: 17,
+        showPopup: false
+    }).addTo(map);
+
+    let marker = L.marker();
+    
+    function onMapClick(e) {
+        marker.setLatLng(e.latlng).addTo(map);
+        // Set the value of the hidden fields
+        document.getElementById("id_latitude").value = e.latlng.lat;
+        document.getElementById("id_longitude").value = e.latlng.lng;
+        completeUbicationWidgets(e.latlng.lat, e.latlng.lng)
+    }
+
+    map.on('click', onMapClick);
+    
+    enableSubmit();
+
+{% endblock %}
+</script>
+
+{% block content %}
+<div class="container mt-8">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h2 class="text-center text-uppercase text-primary mt-5">Registro de reporte</h2>
+            {% if messages %}
+                <div class="row">
+                    <div class="col-lg-10 col-sm-offset-3">
+                    {% include 'messages.html' %}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+            </div>
+            <form method="POST" enctype="multipart/form-data" onkeydown="return event.key != 'Enter';">
+             {% csrf_token %}
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                        <p style="margin-top:2em"><b>Elija ubicaci&oacute;n o zona cercana donde vio la mascota por &uacute;ltima vez *</b> : </p>
+                        <div id="map-report"></div>
+                        <br>
+                        {{ form.as_p }}
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-pill badge-warning">* Campos Requeridos </span>
+                    <br>
+                </div>
+                <div class="mt-10 form-group">
+                    <button type="submit" class="btn btn-success btn-lg btn-block" id="submitButton" disabled="true">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+<script>
+{% block javascript %}
+    //leaflet map
+    var map = initMap('map');
+
+    var markers = L.markerClusterGroup(); // Leaflet's cluster group
+
+    addMarkers({{ reports | safe }} , map, markers);
+    
+    changeView();
+
+{% endblock %}
+</script>
+
+{% block content %}
+    <div class="container mx-auto amarillo shadow rounded">
+        <form class="form-inline justify-content-lg-center" method="POST" id="filter">
+            <div class="row align-items-center mb-3 mt-3 mx-2">
+                {% csrf_token %}
+                <label class="my-1 mx-2 font-weight-bold" for="report_type">Tipo de reporte: </label>
+                {{ form.report_type }}
+                <label class="my-1 mx-2 font-weight-bold" for="specie"> Fecha &uacute;lt. vez visto: </label>
+                {{form.date_from}}
+                <label class="my-1 mx-2 font-weight-bold" for="specie"> a </label>
+                {{form.date_to}}
+            </div>
+            <div class="row align-items-center mb-3 mt-3 mx-2">
+                <label class="my-1 mx-2 font-weight-bold" for="specie">Especie: </label>
+                {{form.specie}}
+                <label class="my-1 mx-2 font-weight-bold" for="specie"> Pa&iacute;s: </label>
+                {{form.country}}
+                <label class="my-1 mx-2 font-weight-bold" for="specie"> Ciudad: </label>
+                {{form.city}}
+                <button type="submit" name="search" class="btn btn-primary my-1 mx-auto">Buscar</button>
+            </div>
+        </form>
+    </div>
+    <div class="container mx-auto mt-2">
+        <div class="row justify-content-lg-center mx-2">
+            <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de mapa"  >
+                    <input type="radio" name="options" id="viewMap" autocomplete="off" onclick="changeView();">  <i class="fas fa-map-marked-alt"></i>
+                </label>
+                <label class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="bottom" title="Vista de lista">
+                    <input type="radio" name="options" id="viewList" autocomplete="off" onclick="changeView();"> <i class="fas fa-list"></i>  
+                </label>        
+            </div>
+        </div>
+    </div>
+<br/>
+<div class="container-fluid flex mx-auto">
+    <div class="row mb-3" id="divMapView">
+        <div class="col-12">
+            <div id="map"></div>
+        </div>
+    </div>
+    <div class="row mb-3" id="divListView">
+        <div class="col-12">
+            {% include 'mapListView.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+    readCookie();
+</script>
+
+{% endblock %}
