@@ -1,11 +1,12 @@
-# Qué es Busca Mascota?
+# Busca Mascota
+## Qué es Busca Mascota?
 Es una plataforma para ayudar a mascotas perdidas a reencontrarse con sus dueños, de una manera distinta y más eficiente.
 
 Se crean reportes de mascotas perdidas, encontradas o avistadas a partir de un formulario, se publica la información del reporte con la ubicación en el mapa en la zona o lugar donde se vio al animal por última vez, se publica este reporte en las redes sociales oficiales de la plataforma (Twitter al instante y facebook e instagram un tiempo después), se crea una imagen con la información del reporte la cuál se puede descargar y así poder enviar por whatsapp u otros medios, el reporte queda guardado y se puede encontrar en la parte de búsquedas ya sea buscando en la vista de mapa o en la vista de lista con filtros para reducir la cantidad de reportes.
 
 Todo esto es totalmente gratis y para facilitar la búsqueda de las mascotas, el código está abierto para cualquier contribución u otra implementación y también se puede colaborar de [muchas otras formas](http://buscammascota.org/colaborar) para mantener la plataforma activa y funcionando siempre.
 
-# Gracias / Contribuciones
+## Gracias / Contribuciones
 * Ximena Gonzalez
 * Lujan Gonzalez
 * Maria Ferreira
@@ -13,7 +14,7 @@ Todo esto es totalmente gratis y para facilitar la búsqueda de las mascotas, el
 * Ricardo Dos Santos
 * Jorge Saldivar
 
-# TODO
+## TODO
 * Agregar filtros en busqueda de reportes (rango de fecha, pais, ciudad) ✅
 * Hacer que funcione los filtros de la busqueda ✅
 * Hacer pagina de colaboraciones ✅
@@ -28,13 +29,13 @@ Todo esto es totalmente gratis y para facilitar la búsqueda de las mascotas, el
 * Improve doc ✅
 * crear pip requirements ✅
 
-# Technologies
+## Technologies
 * Python 3.8
 * Django 3.1
 * Postgresql 1x
 * venv
 
-# Instalacion / Installation (Ubuntu 18.04)
+## Instalacion / Installation (Ubuntu 18.04)
 * `sudo apt-get update`
 * `sudo apt-get install python3-pip libpq-dev postgresql postgresql-contrib python3-venv`
 * `sudo passwd postgres` cambiar contraseña.
