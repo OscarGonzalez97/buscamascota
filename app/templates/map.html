@@ -7,8 +7,13 @@
 
     var markers = L.markerClusterGroup(); // Leaflet's cluster group
 
-    addMarkers({{ reports | safe }} , map, markers);
-    
+    function newMarkers(e) {
+       mapMoves(map, {{ reports | safe }}, markers)
+    }
+    mapMoves(map, {{ reports | safe }}, markers) 
+    map.on('zoomend', newMarkers);
+    map.on('moveend', newMarkers);
+
     changeView();
 
 {% endblock %}

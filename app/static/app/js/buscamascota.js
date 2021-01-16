@@ -54,7 +54,7 @@ function addMarkers(reports, map, markers) {
 function generateInfoWindowContent(report_info) {
     let content = "";
     content = "<p class='text-center text-uppercase h4' style='color: red;'>" + report_info.report_type + "</p>" 
-    content += "<img src='"+report_info.picture+"' alt='mascota' style='width: 100%; height: 100%;'>";
+    content += "<img src='"+report_info.picture+"' alt='mascota' style= 'width: 100%; height: 300px;'>";
     if (report_info.phone != null) 
         content += "<p class='text-center h6'> Contacto: " + report_info.phone + "</p>";
     if (report_info.city != null) 
@@ -149,4 +149,31 @@ function readCookie(){
     //if finish the for and don't enter in the if, it means that the cookie does not exist so the default it's the map view
     document.getElementById("viewMap").checked = true;
     //document.getElementById("viewList").checked = false;
+}
+
+function mapMoves(map, reports, markers){
+    /** 
+    * In this function we load only the reports and markers on the bounds of the map.
+    * @param map: The map element of the DOM
+    * @param reports: all the reports provide by django 
+    * @param markers: markers to bind on the map
+    **/
+    //bounds LatLngBounds type
+    let bounds = map.getBounds();
+    let reportsInBounds = [];
+
+    //limpiamos markers
+    markers.clearLayers();
+    
+    for (i=0; i < reports.length; i++) {
+        if( reports[i].latitude <= bounds._northEast.lat && 
+            reports[i].latitude >= bounds._southWest.lat && 
+            reports[i].longitude <= bounds._northEast.lng && 
+            reports[i].longitude >= bounds._southWest.lng ) {
+                reportsInBounds.push(reports[i]);
+            }
+    }
+
+    addMarkers(reportsInBounds, map, markers);
+
 }
