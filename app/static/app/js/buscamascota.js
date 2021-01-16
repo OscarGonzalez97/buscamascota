@@ -53,8 +53,10 @@ function addMarkers(reports, map, markers) {
 
 function generateInfoWindowContent(report_info) {
     let content = "";
-    content = "<p class='text-center text-uppercase h4' style='color: red;'>" + report_info.report_type + "</p>" 
-    content += "<img src='"+report_info.picture+"' alt='mascota' style= 'width: 100%; height: 300px;'>";
+    content = "<p class='text-center text-uppercase h4' style='color: red;'>" + report_info.report_type + "</p>";
+    content += "<div class='text-center'>"
+    content += "<img src='"+report_info.picture+"' alt='mascota' style= 'max-width: 300px; max-height:200px;'>";
+    content += "</div>"
     if (report_info.phone != null) 
         content += "<p class='text-center h6'> Contacto: " + report_info.phone + "</p>";
     if (report_info.city != null) 
