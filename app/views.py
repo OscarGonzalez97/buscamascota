@@ -112,7 +112,6 @@ def publish(request):
         if form.is_valid():
             if form.cleaned_data['latitude'] and form.cleaned_data['longitude']:
                 instance = form.save(commit=False)
-                instance.who_sent = request.META['REMOTE_ADDR']
                 instance.save()
                 report_id = str(instance.id)
                 request.session['pp_publish'] = True
@@ -152,7 +151,6 @@ def success(request, report_id):
             instance.picture = path_reports
             instance.save()
             reportImageExist = True
-            print('I save the report image!')
             del request.session['pp_publish']
 
         
@@ -274,7 +272,6 @@ def report(request, report_id):
         'url' : url,
         'text' : text,
         }
-        print(context)
         return render(request, 'reporte.html', context)
     else:
         return render(request, '404.html')
