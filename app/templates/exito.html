@@ -25,14 +25,14 @@
             <br>
             <div class="col-7 mx-auto">
                 <div class="text-center">
-                    <h4 class="text-center">{{description}}. {% if age %} Tiene aprox.: {{age}} años. {% endif %} {% if sex %} Sexo: {{sex}}. {% endif %}</h4>
-                    <h4 class="text-center">&Uacute;lt. vez visto el {{last_time_seen|date:"d/m/Y"}}</h4>
-                    <h5 class="text-center">Ubicaci&oacute;n: {{ubication_resume}}.</h5>
+                    <h2 class="text-center">{{description}}. {% if age %} Tiene aprox.: {{age}} años. {% endif %} {% if sex %} Sexo: {{sex}}. {% endif %}</h2>
+                    <h2 class="text-center">&Uacute;lt. vez visto el {{last_time_seen|date:"d/m/Y"}}</h2>
+                    <h3 class="text-center">Ubicaci&oacute;n: {{ubication_resume}}.</h3>
                     {% if name %}
-                        <h4 class="text-center" style="font-family: 'Montserrat', sans-serif; color: red;">Contactar a: {{name}}</h4>
+                        <h2 class="text-center" style="font-family: 'Montserrat', sans-serif; color: red;">Contactar a: {{name}}</h2>
                     {% endif %}
                     {% if phone %}
-                        <h4 class="text-center">Tel.: {{phone}}</h4>
+                        <h2 class="text-center">Tel.: {{phone}}</h2>
                     {% endif %}
                 </div>
             </div>
@@ -51,7 +51,7 @@
         </form>
 
         <script>
-        
+
         window.onload = function() {
             //dom not only ready, but everything is loaded
             html2canvas(document.getElementById("report")).then(canvas => {
