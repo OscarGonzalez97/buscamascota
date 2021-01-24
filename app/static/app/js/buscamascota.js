@@ -55,7 +55,7 @@ function generateInfoWindowContent(report_info) {
     let content = "";
     content = "<p class='text-center text-uppercase h4' style='color: red;'>" + report_info.report_type + "</p>";
     content += "<div class='text-center'>"
-    content += "<img src='"+report_info.picture+"' alt='mascota' style= 'max-width: 300px; max-height:200px;'>";
+    content += "<img src='"+report_info.picture+"' alt='mascota perdida' style= 'max-width: 300px; max-height:200px;'>";
     content += "</div>"
     if (report_info.phone != null) 
         content += "<p class='text-center h6'> Contacto: " + report_info.phone + "</p>";
@@ -137,20 +137,16 @@ function readCookie(){
         if (cookies[i].includes("view=map")){
             console.log(cookies[i]);
             document.getElementById("viewMap").checked = true;
-            //document.getElementById("viewList").checked = false;
             return;
         }
         else{
             console.log(cookies[i]);
-            //document.getElementById("viewMap").checked = false;
             document.getElementById("viewList").checked = true;
             return;
         }
-            
     }
     //if finish the for and don't enter in the if, it means that the cookie does not exist so the default it's the map view
     document.getElementById("viewMap").checked = true;
-    //document.getElementById("viewList").checked = false;
 }
 
 function mapMoves(map, reports, markers){
@@ -164,7 +160,7 @@ function mapMoves(map, reports, markers){
     let bounds = map.getBounds();
     let reportsInBounds = [];
 
-    //limpiamos markers
+    //clen markers
     markers.clearLayers();
     
     for (i=0; i < reports.length; i++) {
