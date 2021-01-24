@@ -61,6 +61,7 @@ class ReportForm(forms.ModelForm):
             'picture': forms.FileInput(
                 attrs={
                     "class": "form-control file-field",
+                    "lang": "es",
                 }
             ),
             'name': forms.TextInput(
@@ -132,8 +133,8 @@ class ReportSucessForm(forms.ModelForm):
 
 class FilterForm(forms.Form):
     report_type = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=REPORT_TYPE_ALL, required=False)
-    date_from = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Select a date', 'type':'date'}), required=False)
-    date_to = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Select a date', 'type':'date'}), required=False)
+    date_from = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Seleccione una fecha', 'type':'date'}), required=False)
+    date_to = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Seleccione una fecha', 'type':'date'}), required=False)
     specie = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=SPECIE_ALL, required=False)
     country = forms.CharField(widget = forms.TextInput(attrs={'class': 'form-control my-1 mr-sm-2'}), required=False)
     city = forms.CharField(widget = forms.TextInput(attrs={'class': 'form-control my-1 mr-sm-2'}), required=False)
