@@ -1,12 +1,13 @@
 from django.db import models
 from app.constants import REPORT_TYPE, SPECIE, SEX
 from django.utils import timezone
+from django_resized import ResizedImageField
 
 class Report(models.Model):
     report_type = models.CharField(max_length=12, choices=REPORT_TYPE, default='')
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=2000)
-    picture = models.ImageField(upload_to='animals')
+    picture = ResizedImageField(size=[600, 600], quality=100, crop=['middle', 'center'], upload_to='animals')
     name = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=30, null=True, blank=True)
     specie = models.CharField(max_length=6, choices=SPECIE, default='')
@@ -24,7 +25,6 @@ class Report(models.Model):
     edited_at = models.DateTimeField(null=True, blank=True)
     last_time_seen = models.DateField()
     accept_terms = models.BooleanField(default=False)
-    who_sent = models.GenericIPAddressField(null=True, blank=True)
     allowed = models.BooleanField(default=True)
     
     def save(self, *args, **kwargs):
