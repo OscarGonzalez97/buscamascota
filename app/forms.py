@@ -27,7 +27,6 @@ class ReportForm(forms.ModelForm):
         'latitude',
         'longitude',
         'accept_terms',
-        'who_sent'
         )
         labels = {
             'report_type': mark_safe('<b>Tipo de reporte * </b>'),
@@ -112,7 +111,6 @@ class ReportForm(forms.ModelForm):
                     'onclick': "enableSubmit();"
                 }
             ),
-            'who_sent': forms.HiddenInput(),
         }
         help_texts  = {
             'report_type' : mark_safe("<small><ul><li><b>Perdido</b>: Si perdiste o alguien perdió su mascota y quieres reportarla como perdida.</li><li><b>Avistado</b>: Si viste una mascota que parecía perdida, pero no pudiste retenerla.</li><li><b>Retenido</b>: Si encontraste una mascota y pudiste retenerla o sabes de alguien que la tiene retenida.</li><li><b>Otro</b>: Otro tipo de reporte.</li></ul></small>"),
