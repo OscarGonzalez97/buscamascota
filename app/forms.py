@@ -27,7 +27,6 @@ class ReportForm(forms.ModelForm):
         'latitude',
         'longitude',
         'accept_terms',
-        'who_sent'
         )
         labels = {
             'report_type': mark_safe('<b>Tipo de reporte * </b>'),
@@ -61,6 +60,7 @@ class ReportForm(forms.ModelForm):
             'picture': forms.FileInput(
                 attrs={
                     "class": "form-control file-field",
+                    "lang": "es",
                 }
             ),
             'name': forms.TextInput(
@@ -111,7 +111,6 @@ class ReportForm(forms.ModelForm):
                     'onclick': "enableSubmit();"
                 }
             ),
-            'who_sent': forms.HiddenInput(),
         }
         help_texts  = {
             'report_type' : mark_safe("<small><ul><li><b>Perdido</b>: Si perdiste o alguien perdió su mascota y quieres reportarla como perdida.</li><li><b>Avistado</b>: Si viste una mascota que parecía perdida, pero no pudiste retenerla.</li><li><b>Retenido</b>: Si encontraste una mascota y pudiste retenerla o sabes de alguien que la tiene retenida.</li><li><b>Otro</b>: Otro tipo de reporte.</li></ul></small>"),
@@ -132,8 +131,8 @@ class ReportSucessForm(forms.ModelForm):
 
 class FilterForm(forms.Form):
     report_type = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=REPORT_TYPE_ALL, required=False)
-    date_from = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Select a date', 'type':'date'}), required=False)
-    date_to = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Select a date', 'type':'date'}), required=False)
+    date_from = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Seleccione una fecha', 'type':'date'}), required=False)
+    date_to = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Seleccione una fecha', 'type':'date'}), required=False)
     specie = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=SPECIE_ALL, required=False)
     country = forms.CharField(widget = forms.TextInput(attrs={'class': 'form-control my-1 mr-sm-2'}), required=False)
     city = forms.CharField(widget = forms.TextInput(attrs={'class': 'form-control my-1 mr-sm-2'}), required=False)
