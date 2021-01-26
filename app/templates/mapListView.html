@@ -4,7 +4,7 @@
             {% for report in page_obj %}
                 <li class="list-group-item">
                     <div class="media">
-                            <a href="{% url 'report' report_id=report.id %}"><img class="align-self-center mr-3 mt-1" width="100px" height="100px" src="{{report.picture}}" alt="report picture {{report.id}}"></a>
+                            <a href="{% url 'report' report_id=report.id %}"><img class="align-self-center mr-3 mt-1" width="150px" height="150px" src="{{report.picture}}" alt="report picture {{report.id}}"></a>
                             <div class="media-body">
                                 <h5 class="mt-0 text-uppercase text-dark mr-2"> <a href="{% url 'report' report_id=report.id %}">{% if report.specie == 'otro' %} ANIMAL {% else %} {{report.specie|upper}} {% endif %}  {{report.report_type|upper}}</a>
                                 </h5>
