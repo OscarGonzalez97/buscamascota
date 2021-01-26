@@ -4,7 +4,7 @@ Es una plataforma para ayudar a mascotas perdidas a reencontrarse con sus dueño
 
 Se crean reportes de mascotas perdidas, encontradas o avistadas a partir de un formulario, se publica la información del reporte con la ubicación en el mapa en la zona o lugar donde se vio al animal por última vez, se publica este reporte en las redes sociales oficiales de la plataforma (Twitter al instante y facebook e instagram un tiempo después), se crea una imagen con la información del reporte la cuál se puede descargar y así poder enviar por whatsapp u otros medios, el reporte queda guardado y se puede encontrar en la parte de búsquedas ya sea buscando en la vista de mapa o en la vista de lista con filtros para reducir la cantidad de reportes.
 
-Todo esto es totalmente gratis y para facilitar la búsqueda de las mascotas, el código está abierto para cualquier contribución u otra implementación y también se puede colaborar de [muchas otras formas](http://buscammascota.org/colaborar) para mantener la plataforma activa y funcionando siempre.
+Todo esto es totalmente gratis y para facilitar la búsqueda de las mascotas, el código está abierto para cualquier contribución u otra implementación y también se puede colaborar de [muchas otras formas](http://buscamascota.org/colaborar) para mantener la plataforma activa y funcionando siempre.
 
 ## Gracias / Contribuciones
 * Ximena Gonzalez
