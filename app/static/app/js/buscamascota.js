@@ -118,6 +118,9 @@ function enableSubmit(){
 }
 
 function changeView(){
+    /**
+    * Change the view when press the button 
+    **/
     if(document.getElementById("viewMap").checked){
         document.getElementById("divMapView").style.display = 'block';
         document.getElementById("divListView").style.display = 'none';
@@ -132,16 +135,13 @@ function changeView(){
 
 function readCookie(){
     let cookies = document.cookie.split(";");
-    console.log(cookies);
     for (i=0; i < cookies.length; i++) {
-        if (cookies[i].includes("view=map")){
-            console.log(cookies[i]);
-            document.getElementById("viewMap").checked = true;
+        if (cookies[i].includes("view=list")){
+            document.getElementById("viewList").checked = true;
             return;
         }
         else{
-            console.log(cookies[i]);
-            document.getElementById("viewList").checked = true;
+            document.getElementById("viewMap").checked = true;
             return;
         }
     }
