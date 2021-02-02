@@ -14,6 +14,12 @@ Todo esto es totalmente gratis y para facilitar la búsqueda de las mascotas, el
 * Ricardo Dos Santos
 * Jorge Saldivar
 
+## Screenshots
+![Mapa](./screenshots/mapa.png)
+![Lista](./screenshots/lista.png)
+![Tweet](./screenshots/tweet.png)
+
+
 ## TODO
 * Agregar filtros en busqueda de reportes (rango de fecha, pais, ciudad) ✅
 * Hacer que funcione los filtros de la busqueda ✅
