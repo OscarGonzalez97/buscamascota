@@ -21,19 +21,11 @@ Todo esto es totalmente gratis y para facilitar la búsqueda de las mascotas, el
 
 
 ## TODO
-* Agregar filtros en busqueda de reportes (rango de fecha, pais, ciudad) ✅
-* Hacer que funcione los filtros de la busqueda ✅
-* Hacer pagina de colaboraciones ✅
-* Hacer vistas de cuando ve el reporte completo ✅
-* Controlar publicaciones que no pueda acceder varias veces ✅
-* Solucionar que las views puedan cambiar y mantenerse cuando se clicka en alguna de ellas ✅
-* En admin que pueda cambiar la publicacion de allowed a False ✅
-* Agregar Google Analytics ✅
 * Agregar logger
 * Agregar que pueda reportarse las publicaciones
-* Crear contenedor para probar (docker) ✅
-* Improve doc ✅
-* crear pip requirements ✅
+* API 🔜
+* App (Android/IOS)
+
 
 ## Technologies
 * Python 3.8
