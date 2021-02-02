@@ -115,6 +115,7 @@ def publish(request):
                 instance.save()
                 report_id = str(instance.id)
                 request.session['pp_publish'] = True
+                request.session['pp_tweet'] = True
                 #redirect to another view where is the report id
                 return redirect('success', report_id=report_id)
             else:
@@ -173,10 +174,11 @@ def success(request, report_id):
         sex = report.sex
         url = "buscamascota.org/reporte/" + str(report_id)
 
-        if reportImageExist:
+        if reportImageExist and ('pp_tweet' in request.session):
             reportImage = ReportImage.objects.get(report_id=report_id)
             #publish at Twitter
             tweet(report.report_type, report.country, report.title, reportImage.picture, url)
+            del request.session['pp_tweet']
             #publish at Instagram & Facebook
             # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
         
