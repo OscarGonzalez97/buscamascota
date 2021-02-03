@@ -37,7 +37,7 @@ def __getReports(report_type, specie, country, city, date_from, date_to):
     elif date_from != '':
         query['last_time_seen__gte'] = date_from 
     
-    report_objs = Report.objects.filter(**query)
+    report_objs = Report.objects.filter(**query).order_by('last_time_seen')
     reports = []
 
     for report_obj in report_objs:
@@ -178,9 +178,9 @@ def success(request, report_id):
             reportImage = ReportImage.objects.get(report_id=report_id)
             #publish at Twitter
             tweet(report.report_type, report.country, report.title, reportImage.picture, url)
-            del request.session['pp_tweet']
             #publish at Instagram & Facebook
-            # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
+            post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
+            del request.session['pp_tweet']
         
     except:
         print("Oops!", sys.exc_info()[0], "occurred.")
