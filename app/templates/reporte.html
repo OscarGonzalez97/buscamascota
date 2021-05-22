@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 <script>
 {% block javascript %}
     //leaflet map
@@ -23,75 +24,68 @@
 </script>
 {% block content %}
 <div class="container mt-8">
-    <div class="row">
-        <div class="col-lg-10 mx-auto">
-            {% if messages %}
-                <div class="row">
-                    <div class="col-lg-10 col-sm-offset-3">
-                    {% include 'messages.html' %}
-                    </div>
+    <div class="col-lg-12 mx-auto">
+        {% if messages %}
+            <div class="row">
+                <div class="col-lg-10 col-sm-offset-3">
+                {% include 'messages.html' %}
                 </div>
-            {% else %}
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="text-center text-uppercase text-primary mt-5">Reporte #{{report_id}}</h2>
-                        <h3 class="text-center my-3"> Fecha de publicaci&oacute;n: {{created_at|date:"d/m/Y"}} a las {{created_at|time:"h:i A"}} </h3>
-                        <h2 class="text-center text-uppercase display-2" style="font-family: 'Montserrat', sans-serif; color: red;"> {{specie}} {{report_type}} </h2>
-                        <div class="divider-custom">
-                            <div class="divider-custom-line"></div>
-                        </div>
-                        <br>
-                        <div class="text-center">
-                            <img id="reportImage" src="{{image}}" class="text-center" alt="mascota perdida {{report_id}}">
-                        </div>
-                        <br>
-                        <div class="col-10 mx-auto">
-                            <div class="text-center">
-                                <h4 class="text-center">{{description}}. {% if age %} Tiene aprox.: {{age}} años. {% endif %} {% if sex %} Sexo: {{sex}}. {% endif %}</h4>
-                                <h4 class="text-center">&Uacute;lt. vez visto el {{last_time_seen|date:"d/m/Y"}}</h4>
-                                <h5 class="text-center">Ubicaci&oacute;n: {{ubication_resume}}.</h5>
-                                {% if name %}
-                                    <h4 class="text-center" style="font-family: 'Montserrat', sans-serif; color: red;">Contactar a: {{name}}</h4>
-                                {% endif %}
-                                {% if phone %}
-                                    <h4 class="text-center">Tel.: {{phone}}</h4>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <br>
-                        <div class="center">
-                            <div id="map"></div>
-                            <a class="btn btn-warning btn-block amarillo" href="https://www.google.com/maps/search/?api=1&query={{latitude}},{{longitude}}" target="_blank">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Abrir en Google Maps</span>
-                            </a>
-                        </div>
-                        <div class="center mt-2">
-                            <a  id="link" class="btn btn-success btn-block" role="button"> <i class="fas fa-download"></i>  Exportar reporte como imagen!</a>
+            </div>
+        {% else %}
+            <div class="card">
+                <h1 class="text-center mt-5 display-4" style="color:#65CAD5; font-family: 'Montserrat';" >Reporte #{{report_id}}</h1>
+                <h3 class="text-center my-3"> Fecha de publicaci&oacute;n: {{created_at|date:"d/m/Y"}} a las {{created_at|time:"h:i A"}} </h3>
+                <h2 class="text-center text-uppercase display-1" style="color: white;background-color:#65CAD5; font-family: 'Montserrat' "> {{specie}} {{report_type}} </h2>
+                <div style="background-image: url({% static 'app/img/background-paws.png' %});  background-repeat: no-repeat;background-size: cover; margin-top: -10px;padding-top: 30px;padding-bottom:30px;">
+                    <div class="text-center">
+                        <img id="reportImage" style="margin-top: 10px; border: 5px solid white; border-radius: 20px;" src="{{image}}" class="text-center" alt="mascota perdida {{report_id}}">
+                    </div>
+                    <br>
+                    <div class="col-10 mx-auto">
+                        <div class="text-center shadow" style="background-color: white; padding: 20px;border-radius: 10px;">
+                            <h4 class="text-center">{{description}}. {% if age %} Tiene aprox.: {{age}} años. {% endif %} {% if sex %} Sexo: {{sex}}. {% endif %}</h4>
+                            <h4 class="text-center">&Uacute;lt. vez visto el {{last_time_seen|date:"d/m/Y"}}</h4>
+                            <h5 class="text-center">Ubicaci&oacute;n: {{ubication_resume}}.</h5>
+                            {% if name %}
+                                <h4 class="text-center" style="font-family: 'Montserrat', sans-serif;">Contactar a: {{name}}</h4>
+                            {% endif %}
+                            {% if phone %}
+                                <h4 class="text-center">Tel.: {{phone}}</h4>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
+                <div class="center" style="margin-top: 30px;">
+                    <div id="map"></div>
+                    <a class="btn btn-warning btn-block amarillo" href="https://www.google.com/maps/search/?api=1&query={{latitude}},{{longitude}}" target="_blank">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Abrir en Google Maps</span>
+                    </a>
+                </div>
+                <div class="center mt-2">
+                    <a  id="link" class="btn btn-success btn-block" role="button"> <i class="fas fa-download"></i>  Exportar reporte como imagen!</a>
+                </div>
+            </div>
 
-                <h5 class="mt-5">Puedes compartir esta publicaci&oacute;n  <i class="fas fa-share text-success"></i> </h5>
-                <div class="btn-group btn-group-lg mb-5" role="group" aria-label="share">
-                    <a class="btn btn-success" href="https://wa.me/?{{text}}" data-action="share/whatsapp/share"  target="_blank">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <a class="btn btn-primary" href="https://www.facebook.com/sharer/sharer.php?u={{url}}" target="_blank">
-                        <i class="fab fa-facebook"></i>
-                    </a>
-                    <a class="btn btn-info" href="https://twitter.com/share?{{text}}&hashtags=BuscaMascota"  target="_blank">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-        <script>
-            let link = document.getElementById('link');
-            //put the image in #link for the client
-            link.setAttribute('download', 'buscaMascotaReporte{{report_id}}.png');
-            link.setAttribute('href', '{{reportImageDownloadable}}');
-        </script>
+            <h5 class="mt-5">Puedes compartir esta publicaci&oacute;n  <i class="fas fa-share text-success"></i> </h5>
+            <div class="btn-group btn-group-lg mb-5" role="group" aria-label="share">
+                <a class="btn btn-success" href="https://wa.me/?{{text}}" data-action="share/whatsapp/share"  target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a class="btn btn-primary" href="https://www.facebook.com/sharer/sharer.php?u={{url}}" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a class="btn btn-info" href="https://twitter.com/share?{{text}}&hashtags=BuscaMascota"  target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+        {% endif %}
     </div>
+    <script>
+        let link = document.getElementById('link');
+        //put the image in #link for the client
+        link.setAttribute('download', 'buscaMascotaReporte{{report_id}}.png');
+        link.setAttribute('href', '{{reportImageDownloadable}}');
+    </script>
 </div>
 {% endblock %}
