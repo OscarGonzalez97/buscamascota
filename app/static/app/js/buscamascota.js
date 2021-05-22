@@ -1,4 +1,3 @@
-
 function initMap(mapDivId) {
     /**
      Initialize leaflet Map in the DOM
@@ -14,9 +13,9 @@ function initMap(mapDivId) {
         },
         minZoom: 2
     }).setView([-23.3165935,-58.1693445], 6); //Paraguay's coordenates
-    
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
     return map;
@@ -28,9 +27,9 @@ function addMarkers(reports, map, markers) {
     map: variable containing the map
     markers: variable containing the group of markers
     ***/
-    
+
     // Create markers
-    let inst_lat, inst_lng; 
+    let inst_lat, inst_lng;
     let arr_pos = [];
     let new_lat, new_lng;
 
@@ -39,11 +38,11 @@ function addMarkers(reports, map, markers) {
         lon = reports[i].longitude;
 
         let leafletMarker = L.marker([lat,lon]);
-        
+
         leafletMarker.bindPopup(generateInfoWindowContent(reports[i]), {
             minWidth : 200
         } ).openPopup();
-        
+
         markers.addLayer(leafletMarker);
     }
 
@@ -57,13 +56,13 @@ function generateInfoWindowContent(report_info) {
     content += "<div class='text-center'>"
     content += "<img src='"+report_info.picture+"' alt='mascota perdida' style= 'max-width: 300px; max-height:200px;'>";
     content += "</div>"
-    if (report_info.phone != null) 
+    if (report_info.phone != null)
         content += "<p class='text-center h6'> Contacto: " + report_info.phone + "</p>";
-    if (report_info.city != null) 
+    if (report_info.city != null)
         content += "<p class='text-center h6'>" + report_info.city + "," + report_info.country + "</p>";
     else
     content += "<p class='text-center h6'>" + report_info.country + "</p>";
-    content += "<p class='text-center'> <a class=\"btn btn-warning mt-1 amarillo\" href=\"http://buscamascota.org/reporte/"+ report_info.id +"\"> Ver reporte completo </a>  </p>"
+    content += "<p class='text-center'> <a class=\"btn btn-warning mt-1 amarillo\" href=\"https://buscamascota.org/reporte/"+ report_info.id +"\"> Ver reporte completo </a>  </p>"
     return content
 }
 
@@ -119,7 +118,7 @@ function enableSubmit(){
 
 function changeView(){
     /**
-    * Change the view when press the button 
+    * Change the view when press the button
     **/
     if(document.getElementById("viewMap").checked){
         document.getElementById("divMapView").style.display = 'block';
@@ -150,17 +149,17 @@ function readCookie(){
 }
 
 function mapMoves(map, reports, markers){
-    /** 
+    /**
     * In this function we load only the reports and markers on the bounds of the map.
     * @param map: The map element of the DOM
-    * @param reports: all the reports provide by django 
+    * @param reports: all the reports provide by django
     * @param markers: markers to bind on the map
     **/
     //bounds LatLngBounds type
     let bounds = map.getBounds();
     let reportsInBounds = [];
 
-    //clen markers
+    //clean markers
     markers.clearLayers();
     
     for (i=0; i < reports.length; i++) {
