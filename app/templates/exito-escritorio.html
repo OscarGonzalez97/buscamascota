@@ -16,28 +16,30 @@
         <h4 class="text-center text-muted">El ID de su reporte es: <b class="text-success font-weight-bold">{{report_id}}</b>, guarde este identificador para futuras modificaciones o consultas.</h4>
         
         <!--HTML report, later saved to an image-->
-        <div class="container-fluid" style="padding:0px; margin:0px;" id="report">
-            <h2 class="text-center text-uppercase display-1" style="color: white;background-color:#65CAD5; font-family: 'Montserrat'"> {{specie}} {{report_type}} </h2>
-            <div style="background-image: url({% static 'app/img/background-paws.png' %});  background-repeat: no-repeat;background-size: cover; margin-top: -10px;padding-top: 30px;padding-bottom:30px;">
-                <div class="text-center">
-                    <img id="reportImage" style="margin-top: 10px; border: 5px solid white; border-radius: 20px;" src="{{image}}" class="text-center" alt="mascota perdida {{report_id}}">
-                </div>
-                <br>
-                <div class="col-10 mx-auto">
-                    <div class="text-center shadow" style="background-color: white; padding: 20px;border-radius: 10px;">
-                        <h4 class="text-center">{{description}}. {% if age %} Tiene aprox.: {{age}} años. {% endif %} {% if sex %} Sexo: {{sex}}. {% endif %}</h4>
-                        <h4 class="text-center">&Uacute;lt. vez visto el {{last_time_seen|date:"d/m/Y"}}</h4>
-                        <h5 class="text-center">Ubicaci&oacute;n: {{ubication_resume}}.</h5>
-                        {% if name %}
-                            <h4 class="text-center" style="font-family: 'Montserrat', sans-serif;">Contactar a: {{name}}</h4>
-                        {% endif %}
-                        {% if phone %}
-                            <h4 class="text-center">Tel.: {{phone}}</h4>
-                        {% endif %}
+        <div style="width:630px; height:500px">
+            <div class="container-fluid" style="padding:0px; margin:0px;" id="report">
+                <h2 class="text-center text-uppercase display-1" style="color: white;background-color:#65CAD5; font-family: 'Montserrat'"> {{specie}} {{report_type}} </h2>
+                <div style="background-image: url({% static 'app/img/background-paws.png' %});  background-repeat: no-repeat;background-size: cover; margin-top: -10px;padding-top: 30px;padding-bottom:30px;">
+                    <div class="text-center">
+                        <img id="reportImage" style="margin-top: 10px; border: 5px solid white; border-radius: 20px;" src="{{image}}" class="text-center" alt="mascota perdida {{report_id}}">
+                    </div>
+                    <br>
+                    <div class="col-10 mx-auto">
+                        <div class="text-center shadow" style="background-color: white; padding: 20px;border-radius: 10px;">
+                            <h4 class="text-center">{{description}}. {% if age %} Tiene aprox.: {{age}} años. {% endif %} {% if sex %} Sexo: {{sex}}. {% endif %}</h4>
+                            <h4 class="text-center">&Uacute;lt. vez visto el {{last_time_seen|date:"d/m/Y"}}</h4>
+                            <h5 class="text-center">Ubicaci&oacute;n: {{ubication_resume}}.</h5>
+                            {% if name %}
+                                <h4 class="text-center" style="font-family: 'Montserrat', sans-serif;">Contactar a: {{name}}</h4>
+                            {% endif %}
+                            {% if phone %}
+                                <h4 class="text-center">Tel.: {{phone}}</h4>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
+                <p class="text-center">Reporte creado en <a href="http://buscamascota.org" target="_blank">buscamascota.org</a></p>
             </div>
-            <p class="text-center">Reporte creado en <a href="http://buscamascota.org" target="_blank">buscamascota.org</a></p>
         </div>
         <br>
         <div class="center">
@@ -67,9 +69,6 @@
                     document.getElementById("form").submit();
                 {% endif %} 
             });
-            
-            
-            
         };            
         </script>
 
