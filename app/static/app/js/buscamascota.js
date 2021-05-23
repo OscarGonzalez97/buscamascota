@@ -118,7 +118,7 @@ function enableSubmit(){
 
 function changeView(){
     /**
-    * Change the view when press the button 
+    * Change the view when press the button
     **/
     if(document.getElementById("viewMap").checked){
         document.getElementById("divMapView").style.display = 'block';
@@ -149,10 +149,10 @@ function readCookie(){
 }
 
 function mapMoves(map, reports, markers){
-    /** 
+    /**
     * In this function we load only the reports and markers on the bounds of the map.
     * @param map: The map element of the DOM
-    * @param reports: all the reports provide by django 
+    * @param reports: all the reports provide by django
     * @param markers: markers to bind on the map
     **/
     //bounds LatLngBounds type

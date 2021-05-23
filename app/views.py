@@ -184,7 +184,7 @@ def success(request, report_id):
         if reportImageExist and ('pp_tweet' in request.session):
             reportImage = ReportImage.objects.get(report_id=report_id)
             # publish at Twitter
-            # tweet(report.report_type, report.country, report.title, reportImage.picture, url)
+            tweet(report.report_type, report.country, report.title, reportImage.picture, url)
             # publish at Instagram & Facebook
             # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
             del request.session['pp_tweet']
