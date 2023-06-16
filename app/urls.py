@@ -14,6 +14,8 @@ urlpatterns = [
     path('licencia/', views.license, name='licencia'),
     path('exito/<int:report_id>', views.success, name='success'),
     re_path(r'^reporte/(?P<report_id>[0-9]+)$', views.report, name='report'),
+    path('test-json', views.test_json, name="json"),
+    path('prueba-json', views.prueba_json, name="json_prueba")
 ]
 
 urlpatterns += staticfiles_urlpatterns()
