@@ -97,7 +97,7 @@ def map(request):
     reports = __getReports(report_type, specie, country,
                            city, date_from, date_to)
 
-    paginator = Paginator(reports, 1)  # Show 15 reports per page.
+    paginator = Paginator(reports, 15)  # Show 15 reports per page.
 
     page_number = request.GET.get('page')
 
