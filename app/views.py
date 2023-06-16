@@ -7,11 +7,14 @@ from urllib.parse import urlencode
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage
 from app.utils import tweet, post_instagram_facebook
+
+from .serializers import ReportSerializer
 
 
 def index(request):
@@ -91,9 +94,10 @@ def map(request):
     else:
         form = FilterForm()
 
-    reports = __getReports(report_type, specie, country, city, date_from, date_to)
+    reports = __getReports(report_type, specie, country,
+                           city, date_from, date_to)
 
-    paginator = Paginator(reports, 15)  # Show 15 reports per page.
+    paginator = Paginator(reports, 1)  # Show 15 reports per page.
 
     page_number = request.GET.get('page')
 
@@ -127,9 +131,11 @@ def publish(request):
                 # redirect to another view where is the report id
                 return redirect('success', report_id=report_id)
             else:
-                messages.error(request, "Es necesario una ubicación, por favor marque un punto en el mapa")
+                messages.error(
+                    request, "Es necesario una ubicación, por favor marque un punto en el mapa")
         else:
-            messages.error(request, "Por favor verifique los datos del formulario")
+            messages.error(
+                request, "Por favor verifique los datos del formulario")
     else:
         form = ReportForm()
 
@@ -184,7 +190,8 @@ def success(request, report_id):
         if reportImageExist and ('pp_tweet' in request.session):
             reportImage = ReportImage.objects.get(report_id=report_id)
             # publish at Twitter
-            tweet(report.report_type, report.country, report.title, reportImage.picture, url)
+            tweet(report.report_type, report.country,
+                  report.title, reportImage.picture, url)
             # publish at Instagram & Facebook
             # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
             del request.session['pp_tweet']
@@ -289,3 +296,34 @@ def report(request, report_id):
         return render(request, 'reporte.html', context)
     else:
         return render(request, '404.html')
+
+
+# API
+def ReportListAPI(request):
+    report_type = specie = country = city = date_from = date_to = ''
+    if request.method == 'POST':
+        report_type = request.POST.get("report_type", "")
+        specie = request.POST.get('specie', "")
+        country = request.POST.get('country', "")
+        city = request.POST.get('city', "")
+        date_from = request.POST.get('date_from', "")
+        date_to = request.POST.get('date_to', "")
+
+    reports = __getReports(report_type, specie, country,
+                           city, date_from, date_to)
+
+    paginator = Paginator(reports, 15)  # Show 15 reports per page.
+
+    page_number = request.GET.get('page')
+
+    if page_number == 0:
+        page_number = 1
+
+    page_obj = paginator.get_page(page_number)
+
+    # return render(request, 'map.html', context)
+
+    # reports2 = Report.objects.all()
+    print(page_obj)
+    serializer = ReportSerializer(page_obj, many=True)
+    return JsonResponse(serializer.data, safe=False)
