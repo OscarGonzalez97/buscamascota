@@ -17,7 +17,8 @@ urlpatterns = [
 
     #API
     path('api/reportes/', views.ReportListAPI, name='report_list_json'),
-    path('api/reportes/<int:page>', views.ReportListAPI, name='report_list_json_pages')
+    path('api/reportes/<int:page>', views.ReportListAPI, name='report_list_json_pages'),
+    path('api/reportes/this-year', views.ReportListThisYearAPI, name='report_list_json_this_year')
 ]
 
 urlpatterns += staticfiles_urlpatterns()

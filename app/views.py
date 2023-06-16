@@ -10,11 +10,14 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
+from django.views.decorators.csrf import csrf_exempt
+
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage
 from app.utils import tweet, post_instagram_facebook
 
 from .serializers import ReportSerializer
+import datetime
 
 
 def index(request):
@@ -298,19 +301,45 @@ def report(request, report_id):
         return render(request, '404.html')
 
 
+def filter_reports(report_type, specie, country, city, date_from, date_to):
+    query = {'allowed': True}
+
+    if report_type != '':
+        query['report_type'] = report_type
+    if specie != '':
+        query['specie'] = specie
+    if country != '':
+        query['country__icontains'] = country
+    if city != '':
+        query['city__icontains'] = city
+    if date_from != '' and date_to != '':
+        query['last_time_seen__range'] = (date_from, date_to)
+    elif date_to != '':
+        query['last_time_seen__lte'] = date_to
+    elif date_from != '':
+        query['last_time_seen__gte'] = date_from
+
+    report_objs = Report.objects.filter(**query).order_by('last_time_seen')
+
+    return report_objs
+
+
 # API
+@csrf_exempt
 def ReportListAPI(request):
     report_type = specie = country = city = date_from = date_to = ''
     if request.method == 'POST':
-        report_type = request.POST.get("report_type", "")
-        specie = request.POST.get('specie', "")
-        country = request.POST.get('country', "")
-        city = request.POST.get('city', "")
-        date_from = request.POST.get('date_from', "")
-        date_to = request.POST.get('date_to', "")
+        form = FilterForm(request.POST)
+        # if 'search' in request.POST:
+        if form.is_valid():
+            report_type = form.cleaned_data['report_type']
+            specie = form.cleaned_data['specie']
+            country = form.cleaned_data['country']
+            city = form.cleaned_data['city']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
 
-    reports = __getReports(report_type, specie, country,
-                           city, date_from, date_to)
+    reports = filter_reports(report_type, specie, country, city, date_from, date_to)
 
     paginator = Paginator(reports, 15)  # Show 15 reports per page.
 
@@ -321,9 +350,16 @@ def ReportListAPI(request):
 
     page_obj = paginator.get_page(page_number)
 
-    # return render(request, 'map.html', context)
-
-    # reports2 = Report.objects.all()
-    print(page_obj)
     serializer = ReportSerializer(page_obj, many=True)
+
+    return JsonResponse(serializer.data, safe=False)\
+
+
+@csrf_exempt
+def ReportListThisYearAPI(request):
+    
+    this_year = datetime.date.today().year
+    reports = Report.objects.filter(created_at__year=this_year)
+    serializer = ReportSerializer(reports, many=True)
+
     return JsonResponse(serializer.data, safe=False)
