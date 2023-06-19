@@ -43,3 +43,20 @@ class ReportImage(models.Model):
     picture = models.CharField(blank=True, max_length=300)
     report_id = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True)
     created_at = models.DateTimeField(editable=False, default=timezone.now)
+
+
+class PetAdoptionModel(models.Model):
+    title = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,null=True, blank=True)
+    description = models.TextField()
+    specie = models.CharField(max_length=100, choices=SPECIE)
+    age = models.PositiveIntegerField(null=True, blank=True)
+    sex = models.CharField(max_length=100, choices=SEX)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=100,)
+    phone = models.CharField(max_length=100, null=True,blank=True)
+    picture = models.ImageField(upload_to='pet_pictures/')
+    allowed = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.specie} - {self.id}"

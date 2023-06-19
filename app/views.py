@@ -10,7 +10,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, redirect
 from PIL import Image
 from app.forms import ReportForm, ReportSucessForm, FilterForm
-from app.models import Report, ReportImage
+from app.models import Report, ReportImage, PetAdoptionModel
 from app.serializer import ReportSerializer
 from app.utils import tweet, post_instagram_facebook
 from django.http import JsonResponse
@@ -295,10 +295,4 @@ def report(request, report_id):
 def report_list(request):
     reports = Report.objects.all()
     serializer = ReportSerializer(reports, many=True)
-    return JsonResponse({"Reportes": serializer.data}, safe=False)
-
-
-def adopt_list(request):
-    adopts = Adopt.objects.all()
-    serializer = AdoptSerializer(adopts, many=True)
     return JsonResponse({"Reportes": serializer.data}, safe=False)
