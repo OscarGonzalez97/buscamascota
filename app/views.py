@@ -345,7 +345,7 @@ def ReportListAPI(request):
     if paginated == 'false':
         serializer = ReportSerializer(reports, many=True)
     else:
-        paginator = Paginator(reports, 15)  # Show 15 reports per page.
+        paginator = Paginator(reports, 1)  # Show 15 reports per page.
 
         page_number = request.GET.get('page')
 
