@@ -11,12 +11,13 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics
 
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage
 from app.utils import tweet, post_instagram_facebook
 
-from .serializers import ReportSerializer
+from .serializers import ReportSerializer, ReportImageSerializer
 import datetime
 
 from .pagination import CustomPagination
@@ -352,3 +353,9 @@ class ReportListAPIView(APIView):
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+
+
+    class ReportImageCreateAPIView(generics.CreateAPIView):
+        queryset = ReportImage.objects.all()
+        serializer_class = ReportImageSerializer
