@@ -248,6 +248,7 @@ def report(request, report_id):
 
             report_type = report.report_type
             image = report.picture.url
+            reportImageDownloadable = report.picture.url
             description = report.description
             age = report.age
             last_time_seen = report.last_time_seen
@@ -268,13 +269,6 @@ def report(request, report_id):
             messages.error(request,
                            "Error al recuperar reporte! Inténtelo más tarde o póngase en contacto con el administrador del sitio.")
 
-        try:
-            reportImage = ReportImage.objects.get(report_id=report_id)
-            path_reports = '/media/reports/report' + str(report_id) + '.png'
-            print("Path reports: ", path_reports)
-            reportImageDownloadable = path_reports
-        except:
-            messages.error(request, "La imagen del reporte no existe!")
 
         context = {
             'report_id': report_id,
