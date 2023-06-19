@@ -14,6 +14,9 @@ urlpatterns = [
     path('licencia/', views.license, name='licencia'),
     path('exito/<int:report_id>', views.success, name='success'),
     re_path(r'^reporte/(?P<report_id>[0-9]+)$', views.report, name='report'),
+
+    #API
+    path('api/reportes/', views.ReportListAPIView.as_view(), name='report_list_json')
 ]
 
 urlpatterns += staticfiles_urlpatterns()
