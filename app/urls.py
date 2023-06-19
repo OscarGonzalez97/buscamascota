@@ -3,7 +3,7 @@ from app import views
 from buscamascota import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
- 
+from app.views import report_list
 urlpatterns = [
     path('', views.index, name='index'),
     path('colaborar/', views.colaborate, name='colaborar'),
@@ -13,6 +13,8 @@ urlpatterns = [
     path('terminos/', views.terms, name='terminos'),
     path('licencia/', views.license, name='licencia'),
     path('exito/<int:report_id>', views.success, name='success'),
+    path('report_list/', report_list, name='report_list'),
+    path('report_list/<int:page>', report_list, name='report_list'),
     re_path(r'^reporte/(?P<report_id>[0-9]+)$', views.report, name='report'),
 ]
 

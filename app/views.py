@@ -7,12 +7,13 @@ from urllib.parse import urlencode
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage
 from app.utils import tweet, post_instagram_facebook
-
+from app.serializers import ReportSerializer
 
 def index(request):
     return render(request, 'index.html')
@@ -179,7 +180,7 @@ def success(request, report_id):
         name = report.name
         phone = report.phone
         sex = report.sex
-        url = "buscamascota.org/reporte/" + str(report_id)
+        url = "127.0.0.1:8000/reporte/" + str(report_id)
 
         if reportImageExist and ('pp_tweet' in request.session):
             reportImage = ReportImage.objects.get(report_id=report_id)
@@ -248,7 +249,7 @@ def report(request, report_id):
             created_at = report.created_at
             latitude = report.latitude
             longitude = report.longitude
-            url = "buscamascota.org/reporte/" + str(report_id)
+            url = "127.0.0.1:8000/reporte/" + str(report_id)
             text = "Conoces esta mascota? Echa un vistazo! " + url
             mydict = {'text': text}
             text = urlencode(mydict)
@@ -260,7 +261,7 @@ def report(request, report_id):
 
         try:
             reportImage = ReportImage.objects.get(report_id=report_id)
-            path_reports = '/media/reports/report' + str(report_id) + '.png'
+            path_reports = '/media/animals/' + str(reportImage) + '.png'
             print("Path reports: ", path_reports)
             reportImageDownloadable = path_reports
         except:
@@ -289,3 +290,42 @@ def report(request, report_id):
         return render(request, 'reporte.html', context)
     else:
         return render(request, '404.html')
+    
+
+def report_list(request):
+    reports = Report.objects.all()
+    paginator = Paginator(reports, 15)  # Show 15 reports per page.
+
+    page_number = request.GET.get('page')
+
+    if page_number == 0:
+        page_number = 1
+
+    page_obj = paginator.get_page(page_number)
+    serializer = ReportSerializer(page_obj, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+def __getReportFilter(report_type, specie, country, city, date_from, date_to):
+    query = {'allowed': True}
+
+    if report_type != '':
+        query['report_type'] = report_type
+
+    if specie != '':
+        query['specie'] = specie
+
+    if country != '':
+        query['country__icontains'] = country
+
+    if city != '':
+        query['city__icontains'] = city
+
+    if date_from != '' and date_to != '':
+        query['last_time_seen__range'] = (date_from, date_to)
+    elif date_to != '':
+        query['last_time_seen__lte'] = date_to
+    elif date_from != '':
+        query['last_time_seen__gte'] = date_from
+
+    report_objs = Report.objects.filter(**query).order_by('last_time_seen')
+    return(report_objs)
