@@ -261,7 +261,7 @@ def report(request, report_id):
 
         try:
             reportImage = ReportImage.objects.get(report_id=report_id)
-            path_reports = '/media/animals/' + str(reportImage) + '.png'
+            path_reports = '/media/reports/report' + str(report_id) + '.png'
             print("Path reports: ", path_reports)
             reportImageDownloadable = path_reports
         except:
