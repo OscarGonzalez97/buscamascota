@@ -300,9 +300,12 @@ def report(request, report_id):
     else:
         return render(request, '404.html')
 
+# API
 
 def filter_reports(report_type, specie, country, city, date_from, date_to):
     query = {'allowed': True}
+    this_year = datetime.date.today().year
+
 
     if report_type != '':
         query['report_type'] = report_type
@@ -314,6 +317,8 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
         query['city__icontains'] = city
     if date_from != '' and date_to != '':
         query['last_time_seen__range'] = (date_from, date_to)
+    elif date_from == '' and date_to == '': #Si no pasa datos de fecha, traer del ultimo año
+        query['created_at__year'] = this_year
     elif date_to != '':
         query['last_time_seen__lte'] = date_to
     elif date_from != '':
@@ -324,7 +329,7 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
     return report_objs
 
 
-# API
+
 @csrf_exempt
 def ReportListAPI(request):
     report_type = specie = country = city = date_from = date_to = ''
@@ -341,25 +346,22 @@ def ReportListAPI(request):
 
     reports = filter_reports(report_type, specie, country, city, date_from, date_to)
 
-    paginator = Paginator(reports, 15)  # Show 15 reports per page.
+    paginated = request.GET.get('paginated')
 
-    page_number = request.GET.get('page')
+    if paginated == 'false':
+        serializer = ReportSerializer(reports, many=True)
+    else:
+        paginator = Paginator(reports, 15)  # Show 15 reports per page.
 
-    if page_number == 0:
-        page_number = 1
+        page_number = request.GET.get('page')
 
-    page_obj = paginator.get_page(page_number)
+        if page_number == 0:
+            page_number = 1
 
-    serializer = ReportSerializer(page_obj, many=True)
+        page_obj = paginator.get_page(page_number)
+
+        serializer = ReportSerializer(page_obj, many=True)
 
     return JsonResponse(serializer.data, safe=False)\
 
 
-@csrf_exempt
-def ReportListThisYearAPI(request):
-    
-    this_year = datetime.date.today().year
-    reports = Report.objects.filter(created_at__year=this_year)
-    serializer = ReportSerializer(reports, many=True)
-
-    return JsonResponse(serializer.data, safe=False)
