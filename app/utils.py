@@ -49,4 +49,3 @@ def post_instagram_facebook(report_type, country, title, filename, url):
    
     bot.upload_photo(filename,  
             caption = text) 
-

@@ -129,6 +129,7 @@ class ReportSucessForm(forms.ModelForm):
             'report_id':forms.HiddenInput(),
         }
 
+
 class FilterForm(forms.Form):
     report_type = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=REPORT_TYPE_ALL, required=False)
     date_from = forms.CharField(widget = forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control my-1 mr-sm-2', 'placeholder':'Seleccione una fecha', 'type':'date'}), required=False)

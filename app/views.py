@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from PIL import Image
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage
+from app.serializer import ReportSerializer
 from app.utils import tweet, post_instagram_facebook
 from django.http import JsonResponse
 
@@ -290,28 +291,8 @@ def report(request, report_id):
     else:
         return render(request, '404.html')
 
-def test_json(request):
-    data = {
-        'key1': 'value1',
-        'key2': 'value2',
-    }
-    return JsonResponse(data)
 
-def prueba_json(request):
-    repo = Report.objects.all()
-
-    vector = []
-
-    for reporte in repo:
-        datas = {
-            'Titulo': reporte.title,
-            'Descripcion': reporte.description,
-            'Nombre': reporte.name
-        }
-        vector.append(datas)
-
-    data = {
-        'Reportes': vector
-    }
-
-    return JsonResponse(data)
+def report_list(request):
+    reports = Report.objects.all()
+    serializer = ReportSerializer(reports, many=True)
+    return JsonResponse({"Reportes": serializer.data}, safe=False)
