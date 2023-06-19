@@ -299,27 +299,3 @@ def report_list(request):
     serializer = ReportSerializer(page_obj, many=True)
     return JsonResponse(serializer.data, safe=False)
 
-def __getReportFilter(report_type, specie, country, city, date_from, date_to):
-    query = {'allowed': True}
-
-    if report_type != '':
-        query['report_type'] = report_type
-
-    if specie != '':
-        query['specie'] = specie
-
-    if country != '':
-        query['country__icontains'] = country
-
-    if city != '':
-        query['city__icontains'] = city
-
-    if date_from != '' and date_to != '':
-        query['last_time_seen__range'] = (date_from, date_to)
-    elif date_to != '':
-        query['last_time_seen__lte'] = date_to
-    elif date_from != '':
-        query['last_time_seen__gte'] = date_from
-
-    report_objs = Report.objects.filter(**query).order_by('last_time_seen')
-    return(report_objs)
