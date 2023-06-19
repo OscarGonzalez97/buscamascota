@@ -167,7 +167,7 @@ def success(request, report_id):
             data = form.cleaned_data['datauri']
             response = urllib.request.urlopen(data)
             im = Image.open(BytesIO(response.file.read()))
-            path_reports = 'media/reports/report' + str(report_id) + '.png'
+            path_reports = 'media/animals/' + str(report_id) + '.png'
             im.save(path_reports, quality=50)
             instance.picture = path_reports
             instance.save()
@@ -193,14 +193,14 @@ def success(request, report_id):
         sex = report.sex
         url = "buscamascota.org/reporte/" + str(report_id)
 
-        if reportImageExist and ('pp_tweet' in request.session):
-            reportImage = ReportImage.objects.get(report_id=report_id)
+        #if reportImageExist and ('pp_tweet' in request.session):
+            #reportImage = ReportImage.objects.get(report_id=report_id)
             # publish at Twitter
-            tweet(report.report_type, report.country,
-                  report.title, reportImage.picture, url)
+            #tweet(report.report_type, report.country,
+             #     report.title, reportImage.picture, url)
             # publish at Instagram & Facebook
             # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
-            del request.session['pp_tweet']
+            #del request.session['pp_tweet']
 
     except:
         print("Oops!", sys.exc_info()[0], "occurred.")
@@ -348,7 +348,7 @@ class ReportListAPIView(APIView):
         paginator = CustomPagination()
         reports = filter_reports(
             report_type, specie, country, city, date_from, date_to)
-        
+
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
