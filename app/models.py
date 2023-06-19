@@ -45,9 +45,9 @@ class PetAdoptionModel(models.Model):
     title = models.CharField(max_length=100)
     name = models.CharField(max_length=100,null=True, blank=True)
     description = models.TextField()
-    specie = models.CharField(max_length=10, choices=SPECIE)
+    specie = models.CharField(max_length=6, choices=SPECIE)
     age = models.PositiveIntegerField(null=True, blank=True)
-    sex = models.CharField(max_length=10, choices=SEX)
+    sex = models.CharField(max_length=12, choices=SEX)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100,)
     phone = models.CharField(max_length=30, null=True,blank=True)
@@ -61,8 +61,5 @@ class PetAdoptionModel(models.Model):
 class ReportImage(models.Model):
     picture = models.CharField(blank=True, max_length=300)
     report_id = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True)
-    picture = ResizedImageField(size=[600, 600], quality=100, crop=['middle', 'center'], upload_to='animals')
-
-    def __str__(self):
-        return str(self.id)
+    created_at = models.DateTimeField(editable=False, default=timezone.now)
     
