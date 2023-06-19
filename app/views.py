@@ -156,7 +156,7 @@ def success(request, report_id):
             data = form.cleaned_data['datauri']
             response = urllib.request.urlopen(data)
             im = Image.open(BytesIO(response.file.read()))
-            path_reports = 'media/reports/report' + str(report_id) + '.png'
+            path_reports = 'media/' + str(report_id) + '.png'
             im.save(path_reports, quality=50)
             instance.picture = path_reports
             instance.save()
@@ -261,7 +261,7 @@ def report(request, report_id):
 
         try:
             reportImage = ReportImage.objects.get(report_id=report_id)
-            path_reports = '/media/reports/report' + str(report_id) + '.png'
+            path_reports = '/media/animals' + str(report_id) + '.png'
             print("Path reports: ", path_reports)
             reportImageDownloadable = path_reports
         except:
@@ -295,4 +295,10 @@ def report(request, report_id):
 def report_list(request):
     reports = Report.objects.all()
     serializer = ReportSerializer(reports, many=True)
+    return JsonResponse({"Reportes": serializer.data}, safe=False)
+
+
+def adopt_list(request):
+    adopts = Adopt.objects.all()
+    serializer = AdoptSerializer(adopts, many=True)
     return JsonResponse({"Reportes": serializer.data}, safe=False)

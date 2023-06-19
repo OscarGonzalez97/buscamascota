@@ -42,10 +42,10 @@ def post_instagram_facebook(report_type, country, title, filename, url):
     bot = Bot() 
     
     
-    bot.login(username = username,  
-            password = INSTA_PASS) 
+    bot.login(username=username,
+              password=INSTA_PASS)
 
-    text = message = '#'+ report_type.upper() + ' #' + country.replace(' ', '').upper() + ' ' + title + ' ' + url
+    text = message = '#' + report_type.upper() + ' #' + country.replace(' ', '').upper() + ' ' + title + ' ' + url
    
-    bot.upload_photo(filename,  
-            caption = text) 
+    bot.upload_photo(filename,
+                     caption=text)
