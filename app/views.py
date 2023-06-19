@@ -19,6 +19,9 @@ from app.utils import tweet, post_instagram_facebook
 from .serializers import ReportSerializer
 import datetime
 
+from .pagination import CustomPagination
+from rest_framework.views import APIView
+
 
 def index(request):
     return render(request, 'index.html')
@@ -269,7 +272,6 @@ def report(request, report_id):
             messages.error(request,
                            "Error al recuperar reporte! Inténtelo más tarde o póngase en contacto con el administrador del sitio.")
 
-
         context = {
             'report_id': report_id,
             'report_type': report_type,
@@ -296,10 +298,10 @@ def report(request, report_id):
 
 # API
 
+
 def filter_reports(report_type, specie, country, city, date_from, date_to):
     query = {'allowed': True}
     this_year = datetime.date.today().year
-
 
     if report_type != '':
         query['report_type'] = report_type
@@ -311,7 +313,7 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
         query['city__icontains'] = city
     if date_from != '' and date_to != '':
         query['last_time_seen__range'] = (date_from, date_to)
-    elif date_from == '' and date_to == '': #Si no pasa datos de fecha, traer del ultimo año
+    elif date_from == '' and date_to == '':  # Si no pasa datos de fecha, traer del ultimo año
         query['created_at__year'] = this_year
     elif date_to != '':
         query['last_time_seen__lte'] = date_to
@@ -323,11 +325,16 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
     return report_objs
 
 
+class ReportListAPIView(APIView):
 
-@csrf_exempt
-def ReportListAPI(request):
-    report_type = specie = country = city = date_from = date_to = ''
-    if request.method == 'POST':
+    def get(self, request, format=None):
+        paginator = CustomPagination()
+        reports = Report.objects.all()
+        result_page = paginator.paginate_queryset(reports, request)
+        serializer = ReportSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+    def post(self, request, format=None):
         form = FilterForm(request.POST)
         # if 'search' in request.POST:
         if form.is_valid():
@@ -338,24 +345,10 @@ def ReportListAPI(request):
             date_from = form.cleaned_data['date_from']
             date_to = form.cleaned_data['date_to']
 
-    reports = filter_reports(report_type, specie, country, city, date_from, date_to)
-
-    paginated = request.GET.get('paginated')
-
-    if paginated == 'false':
-        serializer = ReportSerializer(reports, many=True)
-    else:
-        paginator = Paginator(reports, 1)  # Show 15 reports per page.
-
-        page_number = request.GET.get('page')
-
-        if page_number == 0:
-            page_number = 1
-
-        page_obj = paginator.get_page(page_number)
-
-        serializer = ReportSerializer(page_obj, many=True)
-
-    return JsonResponse(serializer.data, safe=False)\
-
-
+        paginator = CustomPagination()
+        reports = filter_reports(
+            report_type, specie, country, city, date_from, date_to)
+        
+        result_page = paginator.paginate_queryset(reports, request)
+        serializer = ReportSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
