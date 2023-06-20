@@ -330,12 +330,13 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
     return report_objs
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ReportListAPIView(APIView):
 
     def get(self, request, format=None):
         this_year = datetime.date.today().year
         paginator = CustomPagination()
-        reports = Report.objects.filter(created_at__year=this_year)
+        reports = Report.objects.filter(created_at__year=this_year).ordering = ['-id']
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
@@ -374,6 +375,16 @@ def adopt(request, adopt_id):
         return JsonResponse(serializer.data)
     except PetAdoptionModel.DoesNotExist:
         return JsonResponse({'error': 'La adopción no existe.'}, status=404)
+
+
+@api_view(['GET'])
+def ReportDetail(request, report_id):
+    if (Report.objects.filter(id=report_id).exists() ):
+        reporte = Report.objects.filter(id=report_id).first()
+        serializer = ReportSerializer(reporte, many=False)
+        return JsonResponse(serializer.data, safe=False)
+    else:
+        return JsonResponse({'error': 'El reporte no existe' }, status=404)
 
 
 # def publicar(request):  # Vista para guardar una adopción

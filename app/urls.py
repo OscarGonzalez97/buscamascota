@@ -22,7 +22,8 @@ urlpatterns = [
     path('detalle_adopcion', views.PetAdoptionModel, name="detalle_adopcion"),  #Url para guardar una adopción
 
     #API
-    path('api/reportes/', views.ReportListAPIView.as_view(), name='report_list_json')
+    path('api/reportes/', views.ReportListAPIView.as_view(), name='report_list_json'),
+    re_path(r'^api/reporte/(?P<report_id>[0-9]+)$', views.ReportDetail, name='report_detail_json'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
