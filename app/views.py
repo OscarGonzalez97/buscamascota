@@ -3,6 +3,8 @@ import sys
 import urllib
 from io import BytesIO
 from urllib.parse import urlencode
+
+from django.middleware import csrf
 from rest_framework.pagination import PageNumberPagination
 
 from django.contrib import messages
@@ -15,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.generics import ListAPIView
-from app.forms import ReportForm, ReportSucessForm, FilterForm
+from app.forms import ReportForm, ReportSucessForm, FilterForm, PetAdoptionModelForm
 from app.models import Report, ReportImage, PetAdoptionModel
 from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
 from app.utils import tweet, post_instagram_facebook
@@ -376,23 +378,17 @@ def adopt(request, adopt_id):
         return JsonResponse({'error': 'La adopción no existe.'}, status=404)
 
 
-# def publicar(request):  # Vista para guardar una adopción
-#     if request.method == 'POST':
-#         form = PetAdoptionModelForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             instance = form.save(commit=False)
-#             adopt_id = str(instance.id)
-#             request.session['pp_publish'] = True
-#             return redirect('success', adopt_id=adopt_id)
-#         else:
-#             messages.error(request, 'Por favor, verifique los datos del formulario')
-#     else:
-#         form = PetAdoptionModelForm()
-#
-#     context = {'form': form}
-#
-#     return render(request, 'adoptar.html', context)
-#
+def publicar_adopcion(request):
+    if request.method == 'POST':
+        form = PetAdoptionModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        csrf_token = csrf.get_token(request)
+        return JsonResponse({'csrfToken': csrf_token})
 
 
 class PetAdoptionPagination(PageNumberPagination):
