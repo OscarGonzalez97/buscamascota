@@ -10,10 +10,18 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
+from django.views.decorators.csrf import csrf_exempt
+
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage
 from app.utils import tweet, post_instagram_facebook
-from app.serializers import ReportSerializer
+
+from .serializers import ReportSerializer
+import datetime
+
+from .pagination import CustomPagination
+from rest_framework.views import APIView
+
 
 def index(request):
     return render(request, 'index.html')
@@ -92,7 +100,8 @@ def map(request):
     else:
         form = FilterForm()
 
-    reports = __getReports(report_type, specie, country, city, date_from, date_to)
+    reports = __getReports(report_type, specie, country,
+                           city, date_from, date_to)
 
     paginator = Paginator(reports, 15)  # Show 15 reports per page.
 
@@ -128,9 +137,11 @@ def publish(request):
                 # redirect to another view where is the report id
                 return redirect('success', report_id=report_id)
             else:
-                messages.error(request, "Es necesario una ubicación, por favor marque un punto en el mapa")
+                messages.error(
+                    request, "Es necesario una ubicación, por favor marque un punto en el mapa")
         else:
-            messages.error(request, "Por favor verifique los datos del formulario")
+            messages.error(
+                request, "Por favor verifique los datos del formulario")
     else:
         form = ReportForm()
 
@@ -185,7 +196,8 @@ def success(request, report_id):
         if reportImageExist and ('pp_tweet' in request.session):
             reportImage = ReportImage.objects.get(report_id=report_id)
             # publish at Twitter
-            tweet(report.report_type, report.country, report.title, reportImage.picture, url)
+            tweet(report.report_type, report.country,
+                  report.title, reportImage.picture, url)
             # publish at Instagram & Facebook
             # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
             del request.session['pp_tweet']
@@ -260,7 +272,6 @@ def report(request, report_id):
             messages.error(request,
                            "Error al recuperar reporte! Inténtelo más tarde o póngase en contacto con el administrador del sitio.")
 
-
         context = {
             'report_id': report_id,
             'report_type': report_type,
@@ -284,18 +295,60 @@ def report(request, report_id):
         return render(request, 'reporte.html', context)
     else:
         return render(request, '404.html')
-    
 
-def report_list(request):
-    reports = Report.objects.all()
-    paginator = Paginator(reports, 15)  # Show 15 reports per page.
+# API
 
-    page_number = request.GET.get('page')
 
-    if page_number == 0:
-        page_number = 1
+def filter_reports(report_type, specie, country, city, date_from, date_to):
+    query = {'allowed': True}
+    this_year = datetime.date.today().year
 
-    page_obj = paginator.get_page(page_number)
-    serializer = ReportSerializer(page_obj, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    if report_type != '':
+        query['report_type'] = report_type
+    if specie != '':
+        query['specie'] = specie
+    if country != '':
+        query['country__icontains'] = country
+    if city != '':
+        query['city__icontains'] = city
+    if date_from != '' and date_to != '':
+        query['last_time_seen__range'] = (date_from, date_to)
+    elif date_from == '' and date_to == '':  # Si no pasa datos de fecha, traer del ultimo año
+        query['created_at__year'] = this_year
+    elif date_to != '':
+        query['last_time_seen__lte'] = date_to
+    elif date_from != '':
+        query['last_time_seen__gte'] = date_from
 
+    report_objs = Report.objects.filter(**query).order_by('last_time_seen')
+
+    return report_objs
+
+
+class ReportListAPIView(APIView):
+
+    def get(self, request, format=None):
+        paginator = CustomPagination()
+        reports = Report.objects.all()
+        result_page = paginator.paginate_queryset(reports, request)
+        serializer = ReportSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+    def post(self, request, format=None):
+        form = FilterForm(request.POST)
+        # if 'search' in request.POST:
+        if form.is_valid():
+            report_type = form.cleaned_data['report_type']
+            specie = form.cleaned_data['specie']
+            country = form.cleaned_data['country']
+            city = form.cleaned_data['city']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
+
+        paginator = CustomPagination()
+        reports = filter_reports(
+            report_type, specie, country, city, date_from, date_to)
+        
+        result_page = paginator.paginate_queryset(reports, request)
+        serializer = ReportSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
