@@ -112,3 +112,5 @@ media/pet_pictures/*
 
 #my stuff
 animals/
+
+local_settings.py
