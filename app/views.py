@@ -330,8 +330,9 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
 class ReportListAPIView(APIView):
 
     def get(self, request, format=None):
+        this_year = datetime.date.today().year
         paginator = CustomPagination()
-        reports = Report.objects.all()
+        reports = Report.objects.filter(created_at__year=this_year)
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
