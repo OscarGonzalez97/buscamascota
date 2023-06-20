@@ -17,7 +17,7 @@ from rest_framework import generics
 from rest_framework.generics import ListAPIView
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage, PetAdoptionModel
-from app.serializer import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
+from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
 from app.utils import tweet, post_instagram_facebook
 
 from .serializers import ReportSerializer, ReportImageSerializer
