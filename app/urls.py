@@ -15,6 +15,7 @@ urlpatterns = [
     path('exito/<int:report_id>', views.success, name='success'),
     re_path(r'^reporte/(?P<report_id>[0-9]+)$', views.report, name='report'),
     path('lista_reportes', views.report_list, name="lista_reportes"),
+    re_path(r'^adopcion/(?P<adopt_id>[0-9]+)$', views.adopt, name='adopt'),
     path('detalle_adopcion', views.PetAdoptionModel, name="detalle_adopcion"),  #Url para guardar una adopción
 
     #API

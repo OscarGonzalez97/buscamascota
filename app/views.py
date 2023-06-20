@@ -11,10 +11,11 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage, PetAdoptionModel
-from app.serializer import ReportSerializer
+from app.serializer import ReportSerializer, AdoptDetailSerializer
 from app.utils import tweet, post_instagram_facebook
 
 from .serializers import ReportSerializer
@@ -360,19 +361,30 @@ def report_list(request):
     return JsonResponse({"Reportes": serializer.data}, safe=False)
 
 
-def publicar(request):  # Vista para guardar una adopción
-    if request.method == 'POST':
-        form = PetAdoptionModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            adopt_id = str(instance.id)
-            request.session['pp_publish'] = True
-            return redirect('success', adopt_id=adopt_id)
-        else:
-            messages.error(request, 'Por favor, verifique los datos del formulario')
-    else:
-        form = PetAdoptionModelForm()
+@api_view(['GET'])
+def adopt(request, adopt_id):
+    try:
+        adoption = PetAdoptionModel.objects.get(id=adopt_id)
+        serializer = AdoptDetailSerializer(adoption)
+        return JsonResponse(serializer.data)
+    except PetAdoptionModel.DoesNotExist:
+        return JsonResponse({'error': 'La adopción no existe.'}, status=404)
 
-    context = {'form': form}
 
-    return render(request, 'adoptar.html', context)
+# def publicar(request):  # Vista para guardar una adopción
+#     if request.method == 'POST':
+#         form = PetAdoptionModelForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             instance = form.save(commit=False)
+#             adopt_id = str(instance.id)
+#             request.session['pp_publish'] = True
+#             return redirect('success', adopt_id=adopt_id)
+#         else:
+#             messages.error(request, 'Por favor, verifique los datos del formulario')
+#     else:
+#         form = PetAdoptionModelForm()
+#
+#     context = {'form': form}
+#
+#     return render(request, 'adoptar.html', context)
+#
