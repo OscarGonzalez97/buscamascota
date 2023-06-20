@@ -105,6 +105,7 @@ ENV/
 *.sqlite3
 media/reports/*
 media/animals/*
+media/pet_pictures/*
 *.pyc
 *.db
 *.pid

@@ -1,5 +1,5 @@
 from django import forms
-from app.constants import REPORT_TYPE, SPECIE, SEX
+from app.constants import REPORT_TYPE, SPECIE
 from app.models import Report, ReportImage
 from django.utils.safestring import mark_safe
 
@@ -124,10 +124,11 @@ class ReportSucessForm(forms.ModelForm):
     datauri = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = ReportImage
-        fields = ('picture','report_id')
-        widgets = {'picture': forms.HiddenInput(), 
-            'report_id':forms.HiddenInput(),
+        fields = ('picture', 'report_id')
+        widgets = {'picture': forms.HiddenInput(),
+                   'report_id': forms.HiddenInput(),
         }
+
 
 class FilterForm(forms.Form):
     report_type = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=REPORT_TYPE_ALL, required=False)

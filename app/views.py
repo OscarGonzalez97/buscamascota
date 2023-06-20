@@ -11,9 +11,11 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 
 from app.forms import ReportForm, ReportSucessForm, FilterForm
-from app.models import Report, ReportImage
+from app.models import Report, ReportImage, PetAdoptionModel
+from app.serializer import ReportSerializer, AdoptDetailSerializer
 from app.utils import tweet, post_instagram_facebook
 
 from .serializers import ReportSerializer
@@ -167,7 +169,7 @@ def success(request, report_id):
             data = form.cleaned_data['datauri']
             response = urllib.request.urlopen(data)
             im = Image.open(BytesIO(response.file.read()))
-            path_reports = 'media/reports/report' + str(report_id) + '.png'
+            path_reports = 'media/animals/' + str(report_id) + '.png'
             im.save(path_reports, quality=50)
             instance.picture = path_reports
             instance.save()
@@ -193,14 +195,14 @@ def success(request, report_id):
         sex = report.sex
         url = "buscamascota.org/reporte/" + str(report_id)
 
-        if reportImageExist and ('pp_tweet' in request.session):
-            reportImage = ReportImage.objects.get(report_id=report_id)
-            # publish at Twitter
-            tweet(report.report_type, report.country,
-                  report.title, reportImage.picture, url)
-            # publish at Instagram & Facebook
-            # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
-            del request.session['pp_tweet']
+        # if reportImageExist and ('pp_tweet' in request.session):
+        #     reportImage = ReportImage.objects.get(report_id=report_id)
+        #     # publish at Twitter
+        #     tweet(report.report_type, report.country,
+        #           report.title, reportImage.picture, url)
+        #     # publish at Instagram & Facebook
+        #     # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
+        #     del request.session['pp_tweet']
 
     except:
         print("Oops!", sys.exc_info()[0], "occurred.")
@@ -348,7 +350,41 @@ class ReportListAPIView(APIView):
         paginator = CustomPagination()
         reports = filter_reports(
             report_type, specie, country, city, date_from, date_to)
-        
+
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+def report_list(request):
+    reports = Report.objects.all()
+    serializer = ReportSerializer(reports, many=True)
+    return JsonResponse({"Reportes": serializer.data}, safe=False)
+
+
+@api_view(['GET'])
+def adopt(request, adopt_id):
+    try:
+        adoption = PetAdoptionModel.objects.get(id=adopt_id)
+        serializer = AdoptDetailSerializer(adoption)
+        return JsonResponse(serializer.data)
+    except PetAdoptionModel.DoesNotExist:
+        return JsonResponse({'error': 'La adopción no existe.'}, status=404)
+
+
+# def publicar(request):  # Vista para guardar una adopción
+#     if request.method == 'POST':
+#         form = PetAdoptionModelForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             instance = form.save(commit=False)
+#             adopt_id = str(instance.id)
+#             request.session['pp_publish'] = True
+#             return redirect('success', adopt_id=adopt_id)
+#         else:
+#             messages.error(request, 'Por favor, verifique los datos del formulario')
+#     else:
+#         form = PetAdoptionModelForm()
+#
+#     context = {'form': form}
+#
+#     return render(request, 'adoptar.html', context)
+#
