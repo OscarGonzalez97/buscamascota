@@ -167,7 +167,7 @@ def success(request, report_id):
             data = form.cleaned_data['datauri']
             response = urllib.request.urlopen(data)
             im = Image.open(BytesIO(response.file.read()))
-            path_reports = 'media/animals' + str(report_id) + '.png'
+            path_reports = 'media/animals/' + str(report_id) + '.png'
             im.save(path_reports, quality=50)
             instance.picture = path_reports
             instance.save()
