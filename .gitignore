@@ -54,7 +54,7 @@ coverage.xml
 
 # Django stuff:
 *.log
-settings.py
+
 # Flask stuff:
 instance/
 .webassets-cache
