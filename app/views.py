@@ -330,13 +330,13 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
     return report_objs
 
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class ReportListAPIView(APIView):
 
     def get(self, request, format=None):
         this_year = datetime.date.today().year
         paginator = CustomPagination()
-        reports = Report.objects.filter(created_at__year=this_year).ordering = ['-id']
+        reports = Report.objects.filter(created_at__year=this_year).order_by('last_time_seen')
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
