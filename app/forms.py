@@ -1,6 +1,6 @@
 from django import forms
 from app.constants import REPORT_TYPE, SPECIE
-from app.models import Report, ReportImage
+from app.models import Report, ReportImage, PetAdoptionModel
 from django.utils.safestring import mark_safe
 
 REPORT_TYPE_ALL = (('','Todos'),) + REPORT_TYPE
@@ -137,3 +137,9 @@ class FilterForm(forms.Form):
     specie = forms.ChoiceField(widget = forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}), choices=SPECIE_ALL, required=False)
     country = forms.CharField(widget = forms.TextInput(attrs={'class': 'form-control my-1 mr-sm-2'}), required=False)
     city = forms.CharField(widget = forms.TextInput(attrs={'class': 'form-control my-1 mr-sm-2'}), required=False)
+
+
+class PetAdoptionModelForm(forms.ModelForm):
+    class Meta:
+        model = PetAdoptionModel
+        fields = ['title', 'name', 'description', 'specie', 'age', 'sex', 'city', 'country', 'phone', 'picture']

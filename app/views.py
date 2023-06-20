@@ -3,6 +3,8 @@ import sys
 import urllib
 from io import BytesIO
 from urllib.parse import urlencode
+
+from django.middleware import csrf
 from rest_framework.pagination import PageNumberPagination
 
 from django.contrib import messages
@@ -11,14 +13,19 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
+from rest_framework.response import Response
+from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.generics import ListAPIView
-from app.forms import ReportForm, ReportSucessForm, FilterForm
+from app.forms import ReportForm, ReportSucessForm, FilterForm, PetAdoptionModelForm
 from app.models import Report, ReportImage, PetAdoptionModel
-from app.serializer import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
+from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
 from app.utils import tweet, post_instagram_facebook
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
+from .models import Report
 
 from .serializers import ReportSerializer, ReportImageSerializer
 import datetime
@@ -335,7 +342,7 @@ class ReportListAPIView(APIView):
     def get(self, request, format=None):
         this_year = datetime.date.today().year
         paginator = CustomPagination()
-        reports = Report.objects.filter(created_at__year=this_year)
+        reports = Report.objects.filter(created_at__year=this_year).order_by('last_time_seen')
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
@@ -376,6 +383,30 @@ def adopt(request, adopt_id):
         return JsonResponse({'error': 'La adopción no existe.'}, status=404)
 
 
+def publicar_adopcion(request):
+    if request.method == 'POST':
+        form = PetAdoptionModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save()
+            adoption_id = instance.id
+            return JsonResponse({'success': True, 'id': adoption_id})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        csrf_token = csrf.get_token(request)
+        return JsonResponse({'csrfToken': csrf_token})
+
+
+@api_view(['GET'])
+def ReportDetail(request, report_id):
+    if (Report.objects.filter(id=report_id).exists()):
+        reporte = Report.objects.filter(id=report_id).first()
+        serializer = ReportSerializer(reporte, many=False)
+        return JsonResponse(serializer.data, safe=False)
+    else:
+        return JsonResponse({'error': 'El reporte no existe'}, status=404)
+
+
 # def publicar(request):  # Vista para guardar una adopción
 #     if request.method == 'POST':
 #         form = PetAdoptionModelForm(request.POST, request.FILES)
@@ -401,11 +432,46 @@ class PetAdoptionPagination(PageNumberPagination):
     max_page_size = 100
 
 
+class ReportGetAPIView(RetrieveAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
 class PetAdoptionListAPIView(ListAPIView):
     def get(self, request, format=None):
-        # self.get().super()
         paginator = PetAdoptionPagination()
         pet_adoptions = PetAdoptionModel.objects.all()
         result_page = paginator.paginate_queryset(pet_adoptions, request)
         serializer = PetAdoptionSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+    def post(self, request, format=None):
+        form = FilterForm(request.POST)  # Assuming you have a form for filtering
+        if form.is_valid():
+            specie = form.cleaned_data['specie']
+            country = form.cleaned_data['country']
+            city = form.cleaned_data['city']
+            # Add more filter fields as per your requirements
+
+            # Apply filters to the queryset
+            queryset = self.get_queryset()
+            if specie:
+                queryset = queryset.filter(specie=specie)
+            if country:
+                queryset = queryset.filter(country=country)
+            if city:
+                queryset = queryset.filter(city=city)
+            # Apply more filters based on the form fields
+
+            # Paginate the filtered queryset
+            paginator = self.pagination_class()
+            page = paginator.paginate_queryset(queryset, request)
+            serializer = self.serializer_class(page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
