@@ -14,8 +14,8 @@ urlpatterns = [
     path('licencia/', views.license, name='licencia'),
     path('exito/<int:report_id>', views.success, name='success'),
     re_path(r'^reporte/(?P<report_id>[0-9]+)$', views.report, name='report'),
-    path('json', views.report_list, name="json_prueba-drf"),
-    path('jason', views.PetAdoptionModel, name="jason")
+    path('lista_reportes', views.report_list, name="lista_reportes"),
+    path('detalle_adopcion', views.PetAdoptionModel, name="detalle_adopcion")  #Url para guardar una adopción
 ]
 
 urlpatterns += staticfiles_urlpatterns()

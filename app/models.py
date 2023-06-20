@@ -3,7 +3,7 @@ from app.constants import REPORT_TYPE, SPECIE, SEX
 from django.utils import timezone
 from django_resized import ResizedImageField
 
-class Report(models.Model):
+class Report(models.Model):  #Modelo de reporte
     report_type = models.CharField(max_length=12, choices=REPORT_TYPE, default='')
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=2000)
@@ -39,13 +39,13 @@ class Report(models.Model):
     def __str__(self):
         return str(self.id)
 
-class ReportImage(models.Model):
+class ReportImage(models.Model):  #Modelo de imagen de reporte
     picture = models.CharField(blank=True, max_length=300)
     report_id = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True)
     created_at = models.DateTimeField(editable=False, default=timezone.now)
 
 
-class PetAdoptionModel(models.Model):
+class PetAdoptionModel(models.Model):  #Modelo de adopciones
     title = models.CharField(max_length=100)
     name = models.CharField(max_length=100,null=True, blank=True)
     description = models.TextField()
