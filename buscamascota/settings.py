@@ -156,6 +156,6 @@ FILE_UPLOAD_HANDLER=["django.core.files.uploadhandler.MemoryFileUploadHandler",
  "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
 
 try:
-    from local_settings import *
+    from .local_settings import *
 except ImportError as e:
     pass
