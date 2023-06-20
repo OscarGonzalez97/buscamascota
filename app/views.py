@@ -3,8 +3,7 @@ import sys
 import urllib
 from io import BytesIO
 from urllib.parse import urlencode
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
@@ -12,10 +11,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 from rest_framework import generics
 
 from app.forms import ReportForm, ReportSucessForm, FilterForm
-from app.models import Report, ReportImage
+from app.models import Report, ReportImage, PetAdoptionModel
+from app.serializer import ReportSerializer, AdoptDetailSerializer
 from app.utils import tweet, post_instagram_facebook
 
 from .serializers import ReportSerializer, ReportImageSerializer
@@ -195,14 +196,14 @@ def success(request, report_id):
         sex = report.sex
         url = "buscamascota.org/reporte/" + str(report_id)
 
-        #if reportImageExist and ('pp_tweet' in request.session):
-            #reportImage = ReportImage.objects.get(report_id=report_id)
-            # publish at Twitter
-            #tweet(report.report_type, report.country,
-             #     report.title, reportImage.picture, url)
-            # publish at Instagram & Facebook
-            # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
-            #del request.session['pp_tweet']
+        # if reportImageExist and ('pp_tweet' in request.session):
+        #     reportImage = ReportImage.objects.get(report_id=report_id)
+        #     # publish at Twitter
+        #     tweet(report.report_type, report.country,
+        #           report.title, reportImage.picture, url)
+        #     # publish at Instagram & Facebook
+        #     # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
+        #     del request.session['pp_tweet']
 
     except:
         print("Oops!", sys.exc_info()[0], "occurred.")
@@ -330,8 +331,9 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
 class ReportListAPIView(APIView):
 
     def get(self, request, format=None):
+        this_year = datetime.date.today().year
         paginator = CustomPagination()
-        reports = Report.objects.all()
+        reports = Report.objects.filter(created_at__year=this_year)
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
@@ -355,42 +357,36 @@ class ReportListAPIView(APIView):
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+def report_list(request):
+    reports = Report.objects.all()
+    serializer = ReportSerializer(reports, many=True)
+    return JsonResponse({"Reportes": serializer.data}, safe=False)
 
 
-    class ReportImageCreateAPIView(generics.CreateAPIView):
-        queryset = ReportImage.objects.all()
-        serializer_class = ReportImageSerializer
+@api_view(['GET'])
+def adopt(request, adopt_id):
+    try:
+        adoption = PetAdoptionModel.objects.get(id=adopt_id)
+        serializer = AdoptDetailSerializer(adoption)
+        return JsonResponse(serializer.data)
+    except PetAdoptionModel.DoesNotExist:
+        return JsonResponse({'error': 'La adopción no existe.'}, status=404)
 
 
-
-from django.urls import reverse
-
-def GetReportByID(request, report_id):
-    report = get_object_or_404(Report, id=report_id, allowed=True)
-    report_data = {
-        'report_id': report.id,
-        'report_type': report.report_type,
-        'title': report.title,
-        'description': report.description,
-        'picture': str(report.picture.url),  # Convert file URL to string
-        'name': report.name,
-        'phone': report.phone,
-        'specie': report.specie,
-        'age': report.age,
-        'sex': report.sex,
-        'ubication_resume': report.ubication_resume,
-        'country': report.country,
-        'postal_code': report.postal_code,
-        'city': report.city,
-        'address': report.address,
-        'latitude': report.latitude,
-        'longitude': report.longitude,
-        'report_state': report.report_state,
-        'created_at': report.created_at,
-        'edited_at': report.edited_at,
-        'last_time_seen': report.last_time_seen,
-        'accept_terms': report.accept_terms,
-        'allowed': report.allowed,
-    }
-    return JsonResponse(report_data)
-
+# def publicar(request):  # Vista para guardar una adopción
+#     if request.method == 'POST':
+#         form = PetAdoptionModelForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             instance = form.save(commit=False)
+#             adopt_id = str(instance.id)
+#             request.session['pp_publish'] = True
+#             return redirect('success', adopt_id=adopt_id)
+#         else:
+#             messages.error(request, 'Por favor, verifique los datos del formulario')
+#     else:
+#         form = PetAdoptionModelForm()
+#
+#     context = {'form': form}
+#
+#     return render(request, 'adoptar.html', context)
+#

@@ -7,9 +7,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
-
-
-    path('reportget/<int:report_id>/', views.GetReportByID, name='report'),
     path('', views.index, name='index'),
     path('colaborar/', views.colaborate, name='colaborar'),
     path('map/<int:page>', views.map, name='map'),
@@ -19,6 +16,9 @@ urlpatterns = [
     path('licencia/', views.license, name='licencia'),
     path('exito/<int:report_id>', views.success, name='success'),
     re_path(r'^reporte/(?P<report_id>[0-9]+)$', views.report, name='report'),
+    path('lista_reportes', views.report_list, name="lista_reportes"),
+    re_path(r'^adopcion/(?P<adopt_id>[0-9]+)$', views.adopt, name='adopt'),
+    path('detalle_adopcion', views.PetAdoptionModel, name="detalle_adopcion"),  #Url para guardar una adopción
 
     #API
     path('api/reportes/', views.ReportListAPIView.as_view(), name='report_list_json')
