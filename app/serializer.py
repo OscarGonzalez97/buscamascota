@@ -8,7 +8,10 @@ class ReportSerializer(serializers.ModelSerializer):  #Endpoint de listar report
         model = Report
         fields = "__all__"
 
-
+class PetAdoptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PetAdoptionModel
+        fields = '__all__'
 class AdoptDetailSerializer(serializers.ModelSerializer):  #Endpoint para detalle de adopciones
     class Meta:
         model = PetAdoptionModel

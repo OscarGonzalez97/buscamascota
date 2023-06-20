@@ -7,6 +7,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
+    path('pets/', views.PetAdoptionListAPIView.as_view(), name='pet-adoption-list'),
     path('', views.index, name='index'),
     path('colaborar/', views.colaborate, name='colaborar'),
     path('map/<int:page>', views.map, name='map'),

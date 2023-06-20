@@ -3,6 +3,7 @@ import sys
 import urllib
 from io import BytesIO
 from urllib.parse import urlencode
+from rest_framework.pagination import PageNumberPagination
 
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -13,10 +14,10 @@ from PIL import Image
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework import generics
-
+from rest_framework.generics import ListAPIView
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage, PetAdoptionModel
-from app.serializer import ReportSerializer, AdoptDetailSerializer
+from app.serializer import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
 from app.utils import tweet, post_instagram_facebook
 
 from .serializers import ReportSerializer, ReportImageSerializer
@@ -299,6 +300,7 @@ def report(request, report_id):
     else:
         return render(request, '404.html')
 
+
 # API
 
 
@@ -357,6 +359,7 @@ class ReportListAPIView(APIView):
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+
 def report_list(request):
     reports = Report.objects.all()
     serializer = ReportSerializer(reports, many=True)
@@ -390,3 +393,19 @@ def adopt(request, adopt_id):
 #
 #     return render(request, 'adoptar.html', context)
 #
+
+
+class PetAdoptionPagination(PageNumberPagination):
+    page_size = 10  # Number of pet adoptions per page
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+class PetAdoptionListAPIView(ListAPIView):
+    def get(self, request, format=None):
+        # self.get().super()
+        paginator = PetAdoptionPagination()
+        pet_adoptions = PetAdoptionModel.objects.all()
+        result_page = paginator.paginate_queryset(pet_adoptions, request)
+        serializer = PetAdoptionSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
