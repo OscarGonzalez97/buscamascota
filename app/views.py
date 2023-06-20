@@ -157,7 +157,7 @@ def success(request, report_id):
             data = form.cleaned_data['datauri']
             response = urllib.request.urlopen(data)
             im = Image.open(BytesIO(response.file.read()))
-            path_reports = 'media/' + str(report_id) + '.png'
+            path_reports = 'media/reports/report' + str(report_id) + '.png'
             im.save(path_reports, quality=50)
             instance.picture = path_reports
             instance.save()
@@ -240,6 +240,7 @@ def report(request, report_id):
 
             report_type = report.report_type
             image = report.picture.url
+            reportImageDownloadable = report.picture.url
             description = report.description
             age = report.age
             last_time_seen = report.last_time_seen
@@ -260,13 +261,6 @@ def report(request, report_id):
             messages.error(request,
                            "Error al recuperar reporte! Inténtelo más tarde o póngase en contacto con el administrador del sitio.")
 
-        try:
-            reportImage = ReportImage.objects.get(report_id=report_id)
-            path_reports = '/media/animals' + str(report_id) + '.png'
-            print("Path reports: ", path_reports)
-            reportImageDownloadable = path_reports
-        except:
-            messages.error(request, "La imagen del reporte no existe!")
 
         context = {
             'report_id': report_id,
