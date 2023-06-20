@@ -382,8 +382,9 @@ def publicar_adopcion(request):
     if request.method == 'POST':
         form = PetAdoptionModelForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
+            instance = form.save()
+            adoption_id = instance.id
+            return JsonResponse({'success': True, 'id': adoption_id})
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
     else:
