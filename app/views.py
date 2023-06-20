@@ -337,7 +337,7 @@ class ReportListAPIView(APIView):
     def get(self, request, format=None):
         this_year = datetime.date.today().year
         paginator = CustomPagination()
-        reports = Report.objects.filter(created_at__year=this_year)
+        reports = Report.objects.filter(created_at__year=this_year).order_by('last_time_seen')
         result_page = paginator.paginate_queryset(reports, request)
         serializer = ReportSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
@@ -390,6 +390,35 @@ def publicar_adopcion(request):
     else:
         csrf_token = csrf.get_token(request)
         return JsonResponse({'csrfToken': csrf_token})
+
+
+@api_view(['GET'])
+def ReportDetail(request, report_id):
+    if (Report.objects.filter(id=report_id).exists()):
+        reporte = Report.objects.filter(id=report_id).first()
+        serializer = ReportSerializer(reporte, many=False)
+        return JsonResponse(serializer.data, safe=False)
+    else:
+        return JsonResponse({'error': 'El reporte no existe'}, status=404)
+
+
+# def publicar(request):  # Vista para guardar una adopción
+#     if request.method == 'POST':
+#         form = PetAdoptionModelForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             instance = form.save(commit=False)
+#             adopt_id = str(instance.id)
+#             request.session['pp_publish'] = True
+#             return redirect('success', adopt_id=adopt_id)
+#         else:
+#             messages.error(request, 'Por favor, verifique los datos del formulario')
+#     else:
+#         form = PetAdoptionModelForm()
+#
+#     context = {'form': form}
+#
+#     return render(request, 'adoptar.html', context)
+#
 
 
 class PetAdoptionPagination(PageNumberPagination):
