@@ -21,6 +21,9 @@ from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage, PetAdoptionModel
 from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
 from app.utils import tweet, post_instagram_facebook
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
+from .models import Report
 
 from .serializers import ReportSerializer, ReportImageSerializer
 import datetime
@@ -401,6 +404,16 @@ class PetAdoptionPagination(PageNumberPagination):
     page_size = 10  # Number of pet adoptions per page
     page_size_query_param = 'page_size'
     max_page_size = 100
+
+
+class ReportGetAPIView(RetrieveAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class PetAdoptionListAPIView(ListAPIView):
