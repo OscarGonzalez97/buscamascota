@@ -4,7 +4,12 @@ from buscamascota import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
  
+
+
 urlpatterns = [
+    path('report-images/', ReportImageCreateAPIView.as_view(), name='report-image-create'),
+
+
     path('', views.index, name='index'),
     path('colaborar/', views.colaborate, name='colaborar'),
     path('map/<int:page>', views.map, name='map'),

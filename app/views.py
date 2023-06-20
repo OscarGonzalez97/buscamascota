@@ -12,13 +12,14 @@ from django.shortcuts import render, redirect
 from PIL import Image
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
+from rest_framework import generics
 
 from app.forms import ReportForm, ReportSucessForm, FilterForm
 from app.models import Report, ReportImage, PetAdoptionModel
 from app.serializer import ReportSerializer, AdoptDetailSerializer
 from app.utils import tweet, post_instagram_facebook
 
-from .serializers import ReportSerializer
+from .serializers import ReportSerializer, ReportImageSerializer
 import datetime
 
 from .pagination import CustomPagination
