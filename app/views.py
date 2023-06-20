@@ -11,6 +11,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
+from rest_framework.response import Response
+from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -403,9 +405,34 @@ class PetAdoptionPagination(PageNumberPagination):
 
 class PetAdoptionListAPIView(ListAPIView):
     def get(self, request, format=None):
-        # self.get().super()
         paginator = PetAdoptionPagination()
         pet_adoptions = PetAdoptionModel.objects.all()
         result_page = paginator.paginate_queryset(pet_adoptions, request)
         serializer = PetAdoptionSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+    def post(self, request, format=None):
+        form = FilterForm(request.POST)  # Assuming you have a form for filtering
+        if form.is_valid():
+            specie = form.cleaned_data['specie']
+            country = form.cleaned_data['country']
+            city = form.cleaned_data['city']
+            # Add more filter fields as per your requirements
+
+            # Apply filters to the queryset
+            queryset = self.get_queryset()
+            if specie:
+                queryset = queryset.filter(specie=specie)
+            if country:
+                queryset = queryset.filter(country=country)
+            if city:
+                queryset = queryset.filter(city=city)
+            # Apply more filters based on the form fields
+
+            # Paginate the filtered queryset
+            paginator = self.pagination_class()
+            page = paginator.paginate_queryset(queryset, request)
+            serializer = self.serializer_class(page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
