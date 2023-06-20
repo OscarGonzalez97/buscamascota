@@ -56,7 +56,7 @@ class PetAdoptionModel(models.Model):
 
     def __str__(self):
         return f"{self.specie} - {self.id}"
-
+    
 
 class ReportImage(models.Model):
     picture = models.CharField(blank=True, max_length=300)
