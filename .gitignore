@@ -1,3 +1,5 @@
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -52,7 +54,7 @@ coverage.xml
 
 # Django stuff:
 *.log
-settings.py
+
 # Flask stuff:
 instance/
 .webassets-cache
@@ -103,6 +105,7 @@ ENV/
 *.sqlite3
 media/reports/*
 media/animals/*
+media/pet_pictures/*
 *.pyc
 *.db
 *.pid

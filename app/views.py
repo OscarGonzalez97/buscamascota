@@ -3,15 +3,28 @@ import sys
 import urllib
 from io import BytesIO
 from urllib.parse import urlencode
+from rest_framework.pagination import PageNumberPagination
 
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from rest_framework import generics
+from rest_framework.generics import ListAPIView
 from app.forms import ReportForm, ReportSucessForm, FilterForm
-from app.models import Report, ReportImage
+from app.models import Report, ReportImage, PetAdoptionModel
+from app.serializer import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
 from app.utils import tweet, post_instagram_facebook
+
+from .serializers import ReportSerializer, ReportImageSerializer
+import datetime
+
+from .pagination import CustomPagination
+from rest_framework.views import APIView
 
 
 def index(request):
@@ -91,7 +104,8 @@ def map(request):
     else:
         form = FilterForm()
 
-    reports = __getReports(report_type, specie, country, city, date_from, date_to)
+    reports = __getReports(report_type, specie, country,
+                           city, date_from, date_to)
 
     paginator = Paginator(reports, 15)  # Show 15 reports per page.
 
@@ -127,9 +141,11 @@ def publish(request):
                 # redirect to another view where is the report id
                 return redirect('success', report_id=report_id)
             else:
-                messages.error(request, "Es necesario una ubicación, por favor marque un punto en el mapa")
+                messages.error(
+                    request, "Es necesario una ubicación, por favor marque un punto en el mapa")
         else:
-            messages.error(request, "Por favor verifique los datos del formulario")
+            messages.error(
+                request, "Por favor verifique los datos del formulario")
     else:
         form = ReportForm()
 
@@ -181,13 +197,14 @@ def success(request, report_id):
         sex = report.sex
         url = "buscamascota.org/reporte/" + str(report_id)
 
-        if reportImageExist and ('pp_tweet' in request.session):
-            reportImage = ReportImage.objects.get(report_id=report_id)
-            # publish at Twitter
-            tweet(report.report_type, report.country, report.title, reportImage.picture, url)
-            # publish at Instagram & Facebook
-            # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
-            del request.session['pp_tweet']
+        # if reportImageExist and ('pp_tweet' in request.session):
+        #     reportImage = ReportImage.objects.get(report_id=report_id)
+        #     # publish at Twitter
+        #     tweet(report.report_type, report.country,
+        #           report.title, reportImage.picture, url)
+        #     # publish at Instagram & Facebook
+        #     # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
+        #     del request.session['pp_tweet']
 
     except:
         print("Oops!", sys.exc_info()[0], "occurred.")
@@ -259,7 +276,6 @@ def report(request, report_id):
             messages.error(request,
                            "Error al recuperar reporte! Inténtelo más tarde o póngase en contacto con el administrador del sitio.")
 
-
         context = {
             'report_id': report_id,
             'report_type': report_type,
@@ -283,3 +299,113 @@ def report(request, report_id):
         return render(request, 'reporte.html', context)
     else:
         return render(request, '404.html')
+
+
+# API
+
+
+def filter_reports(report_type, specie, country, city, date_from, date_to):
+    query = {'allowed': True}
+    this_year = datetime.date.today().year
+
+    if report_type != '':
+        query['report_type'] = report_type
+    if specie != '':
+        query['specie'] = specie
+    if country != '':
+        query['country__icontains'] = country
+    if city != '':
+        query['city__icontains'] = city
+    if date_from != '' and date_to != '':
+        query['last_time_seen__range'] = (date_from, date_to)
+    elif date_from == '' and date_to == '':  # Si no pasa datos de fecha, traer del ultimo año
+        query['created_at__year'] = this_year
+    elif date_to != '':
+        query['last_time_seen__lte'] = date_to
+    elif date_from != '':
+        query['last_time_seen__gte'] = date_from
+
+    report_objs = Report.objects.filter(**query).order_by('last_time_seen')
+
+    return report_objs
+
+
+class ReportListAPIView(APIView):
+
+    def get(self, request, format=None):
+        this_year = datetime.date.today().year
+        paginator = CustomPagination()
+        reports = Report.objects.filter(created_at__year=this_year)
+        result_page = paginator.paginate_queryset(reports, request)
+        serializer = ReportSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+    def post(self, request, format=None):
+        form = FilterForm(request.POST)
+        # if 'search' in request.POST:
+        if form.is_valid():
+            report_type = form.cleaned_data['report_type']
+            specie = form.cleaned_data['specie']
+            country = form.cleaned_data['country']
+            city = form.cleaned_data['city']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
+
+        paginator = CustomPagination()
+        reports = filter_reports(
+            report_type, specie, country, city, date_from, date_to)
+
+        result_page = paginator.paginate_queryset(reports, request)
+        serializer = ReportSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+
+def report_list(request):
+    reports = Report.objects.all()
+    serializer = ReportSerializer(reports, many=True)
+    return JsonResponse({"Reportes": serializer.data}, safe=False)
+
+
+@api_view(['GET'])
+def adopt(request, adopt_id):
+    try:
+        adoption = PetAdoptionModel.objects.get(id=adopt_id)
+        serializer = AdoptDetailSerializer(adoption)
+        return JsonResponse(serializer.data)
+    except PetAdoptionModel.DoesNotExist:
+        return JsonResponse({'error': 'La adopción no existe.'}, status=404)
+
+
+# def publicar(request):  # Vista para guardar una adopción
+#     if request.method == 'POST':
+#         form = PetAdoptionModelForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             instance = form.save(commit=False)
+#             adopt_id = str(instance.id)
+#             request.session['pp_publish'] = True
+#             return redirect('success', adopt_id=adopt_id)
+#         else:
+#             messages.error(request, 'Por favor, verifique los datos del formulario')
+#     else:
+#         form = PetAdoptionModelForm()
+#
+#     context = {'form': form}
+#
+#     return render(request, 'adoptar.html', context)
+#
+
+
+class PetAdoptionPagination(PageNumberPagination):
+    page_size = 10  # Number of pet adoptions per page
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+class PetAdoptionListAPIView(ListAPIView):
+    def get(self, request, format=None):
+        # self.get().super()
+        paginator = PetAdoptionPagination()
+        pet_adoptions = PetAdoptionModel.objects.all()
+        result_page = paginator.paginate_queryset(pet_adoptions, request)
+        serializer = PetAdoptionSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
