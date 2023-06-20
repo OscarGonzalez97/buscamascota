@@ -7,9 +7,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
-    path('report-images/', ReportImageCreateAPIView.as_view(), name='report-image-create'),
 
 
+    path('reportget/<int:report_id>/', views.GetReportByID, name='report'),
     path('', views.index, name='index'),
     path('colaborar/', views.colaborate, name='colaborar'),
     path('map/<int:page>', views.map, name='map'),

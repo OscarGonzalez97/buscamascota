@@ -3,7 +3,8 @@ import sys
 import urllib
 from io import BytesIO
 from urllib.parse import urlencode
-
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
@@ -359,3 +360,37 @@ class ReportListAPIView(APIView):
     class ReportImageCreateAPIView(generics.CreateAPIView):
         queryset = ReportImage.objects.all()
         serializer_class = ReportImageSerializer
+
+
+
+from django.urls import reverse
+
+def GetReportByID(request, report_id):
+    report = get_object_or_404(Report, id=report_id, allowed=True)
+    report_data = {
+        'report_id': report.id,
+        'report_type': report.report_type,
+        'title': report.title,
+        'description': report.description,
+        'picture': str(report.picture.url),  # Convert file URL to string
+        'name': report.name,
+        'phone': report.phone,
+        'specie': report.specie,
+        'age': report.age,
+        'sex': report.sex,
+        'ubication_resume': report.ubication_resume,
+        'country': report.country,
+        'postal_code': report.postal_code,
+        'city': report.city,
+        'address': report.address,
+        'latitude': report.latitude,
+        'longitude': report.longitude,
+        'report_state': report.report_state,
+        'created_at': report.created_at,
+        'edited_at': report.edited_at,
+        'last_time_seen': report.last_time_seen,
+        'accept_terms': report.accept_terms,
+        'allowed': report.allowed,
+    }
+    return JsonResponse(report_data)
+
