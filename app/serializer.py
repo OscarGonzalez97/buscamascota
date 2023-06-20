@@ -10,6 +10,6 @@ class ReportSerializer(serializers.ModelSerializer):  #Endpoint de listar report
 
 
 class AdoptDetailSerializer(serializers.ModelSerializer):  #Endpoint para detalle de adopciones
-    class Beta:
+    class Meta:
         model = PetAdoptionModel
         fields = ['title', 'name', 'description', 'specie', 'age', 'sex', 'city', 'country', 'phone', 'picture']
