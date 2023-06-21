@@ -204,14 +204,14 @@ def success(request, report_id):
         sex = report.sex
         url = "buscamascota.org/reporte/" + str(report_id)
 
-        # if reportImageExist and ('pp_tweet' in request.session):
-        #     reportImage = ReportImage.objects.get(report_id=report_id)
-        #     # publish at Twitter
-        #     tweet(report.report_type, report.country,
-        #           report.title, reportImage.picture, url)
-        #     # publish at Instagram & Facebook
-        #     # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
-        #     del request.session['pp_tweet']
+        if reportImageExist and ('pp_tweet' in request.session):
+            reportImage = ReportImage.objects.get(report_id=report_id)
+            # publish at Twitter
+            tweet(report.report_type, report.country,
+                  report.title, reportImage.picture, url)
+            # publish at Instagram & Facebook
+            # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
+            del request.session['pp_tweet']
 
     except:
         print("Oops!", sys.exc_info()[0], "occurred.")
@@ -407,23 +407,23 @@ def ReportDetail(request, report_id):
         return JsonResponse({'error': 'El reporte no existe'}, status=404)
 
 
-# def publicar(request):  # Vista para guardar una adopción
-#     if request.method == 'POST':
-#         form = PetAdoptionModelForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             instance = form.save(commit=False)
-#             adopt_id = str(instance.id)
-#             request.session['pp_publish'] = True
-#             return redirect('success', adopt_id=adopt_id)
-#         else:
-#             messages.error(request, 'Por favor, verifique los datos del formulario')
-#     else:
-#         form = PetAdoptionModelForm()
-#
-#     context = {'form': form}
-#
-#     return render(request, 'adoptar.html', context)
-#
+def publicar(request):  # Vista para guardar una adopción
+    if request.method == 'POST':
+        form = PetAdoptionModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            adopt_id = str(instance.id)
+            request.session['pp_publish'] = True
+            return redirect('success', adopt_id=adopt_id)
+        else:
+            messages.error(request, 'Por favor, verifique los datos del formulario')
+    else:
+        form = PetAdoptionModelForm()
+
+    context = {'form': form}
+
+    return render(request, 'adoptar.html', context)
+
 
 
 class PetAdoptionPagination(PageNumberPagination):

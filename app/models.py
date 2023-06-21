@@ -57,9 +57,3 @@ class PetAdoptionModel(models.Model):
     def __str__(self):
         return f"{self.specie} - {self.id}"
     
-
-class ReportImage(models.Model):
-    picture = models.CharField(blank=True, max_length=300)
-    report_id = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True)
-    created_at = models.DateTimeField(editable=False, default=timezone.now)
-    
