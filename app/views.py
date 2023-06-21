@@ -341,15 +341,29 @@ class ReportListAPIView(APIView):
 
     def get(self, request, format=None):
         this_year = datetime.date.today().year
-        paginator = CustomPagination()
         reports = Report.objects.filter(created_at__year=this_year).order_by('last_time_seen')
-        result_page = paginator.paginate_queryset(reports, request)
-        serializer = ReportSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        is_paginated = True
+
+        try:
+            paginated = request.query_params["paginated"]
+            if paginated == 'false':
+                serializer = ReportSerializer(reports, many=True)
+                is_paginated = False
+            elif paginated == 'true':
+                raise Exception()  # Para que ingrese a bloque Except
+        except:
+            paginator = CustomPagination()
+            result_page = paginator.paginate_queryset(reports, request)
+            serializer = ReportSerializer(result_page, many=True)
+
+        if is_paginated:
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            return JsonResponse({'results': serializer.data}, safe=False)
 
     def post(self, request, format=None):
-        form = FilterForm(request.POST)
-        # if 'search' in request.POST:
+        form = FilterForm(request.data)
+        report_type = specie = country = city = date_from = date_to = ''
         if form.is_valid():
             report_type = form.cleaned_data['report_type']
             specie = form.cleaned_data['specie']
@@ -396,7 +410,20 @@ def publicar_adopcion(request):
         csrf_token = csrf.get_token(request)
         return JsonResponse({'csrfToken': csrf_token})
 
-
+@csrf_exempt
+def publicar_reporte(request):
+    if request.method == 'POST':
+        form = ReportForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save()
+            report_id = instance.id
+            return JsonResponse({'success': True, 'id': report_id})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    else:
+        csrf_token = csrf.get_token(request)
+        return JsonResponse({'csrfToken': csrf_token})
+    
 @api_view(['GET'])
 def ReportDetail(request, report_id):
     if (Report.objects.filter(id=report_id).exists()):

@@ -3,7 +3,7 @@ from app import views
 from buscamascota import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
- 
+
 
 
 urlpatterns = [
@@ -22,6 +22,7 @@ urlpatterns = [
     path('detalle_adopcion', views.PetAdoptionModel, name="detalle_adopcion"),  #Url para guardar una adopción
 path('reportesget/<int:pk>/', views.ReportGetAPIView.as_view(), name='report-get'),
     path('adopciones-publicar/', views.publicar_adopcion, name="adopciones-publicar"),
+    path('reportes-publicar/', views.publicar_reporte, name="reportes-publicar"),
 
     #API
     path('api/reportes/', views.ReportListAPIView.as_view(), name='report_list_json'),
