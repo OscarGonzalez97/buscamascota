@@ -409,7 +409,8 @@ def publicar_adopcion(request):
     else:
         csrf_token = csrf.get_token(request)
         return JsonResponse({'csrfToken': csrf_token})
-    
+
+@csrf_exempt
 def publicar_reporte(request):
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
@@ -418,7 +419,7 @@ def publicar_reporte(request):
             report_id = instance.id
             return JsonResponse({'success': True, 'id': report_id})
         else:
-            return JsonResponse({'success': False, 'errors': form.errors})
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
     else:
         csrf_token = csrf.get_token(request)
         return JsonResponse({'csrfToken': csrf_token})
