@@ -342,6 +342,8 @@ class ReportListAPIView(APIView):
             if paginated == 'false':
                 serializer = ReportSerializer(reports, many=True)
                 is_paginated = False
+            elif paginated == 'true':
+                raise Exception() #Para que ingrese a bloque Except
         except:
             paginator = CustomPagination()
             result_page = paginator.paginate_queryset(reports, request)
