@@ -330,35 +330,47 @@ def filter_reports(report_type, specie, country, city, date_from, date_to):
     return report_objs
 
 
-
 class ReportListAPIView(APIView):
 
     def get(self, request, format=None):
         this_year = datetime.date.today().year
-        paginator = CustomPagination()
         reports = Report.objects.filter(created_at__year=this_year).order_by('last_time_seen')
-        result_page = paginator.paginate_queryset(reports, request)
-        serializer = ReportSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        is_paginated = True
 
-    def post(self, request, format=None):
-        form = FilterForm(request.POST)
-        # if 'search' in request.POST:
-        if form.is_valid():
-            report_type = form.cleaned_data['report_type']
-            specie = form.cleaned_data['specie']
-            country = form.cleaned_data['country']
-            city = form.cleaned_data['city']
-            date_from = form.cleaned_data['date_from']
-            date_to = form.cleaned_data['date_to']
+        try:
+            paginated = request.query_params["paginated"]
+            if paginated == 'false':
+                serializer = ReportSerializer(reports, many=True)
+                is_paginated = False
+        except:
+            paginator = CustomPagination()
+            result_page = paginator.paginate_queryset(reports, request)
+            serializer = ReportSerializer(result_page, many=True)
 
-        paginator = CustomPagination()
-        reports = filter_reports(
-            report_type, specie, country, city, date_from, date_to)
+        if is_paginated:
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            return JsonResponse(serializer.data, safe=False)
 
-        result_page = paginator.paginate_queryset(reports, request)
-        serializer = ReportSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+
+def post(self, request, format=None):
+    form = FilterForm(request.POST)
+    # if 'search' in request.POST:
+    if form.is_valid():
+        report_type = form.cleaned_data['report_type']
+        specie = form.cleaned_data['specie']
+        country = form.cleaned_data['country']
+        city = form.cleaned_data['city']
+        date_from = form.cleaned_data['date_from']
+        date_to = form.cleaned_data['date_to']
+
+    paginator = CustomPagination()
+    reports = filter_reports(
+        report_type, specie, country, city, date_from, date_to)
+
+    result_page = paginator.paginate_queryset(reports, request)
+    serializer = ReportSerializer(result_page, many=True)
+    return paginator.get_paginated_response(serializer.data)
 
 
 def report_list(request):
@@ -379,12 +391,12 @@ def adopt(request, adopt_id):
 
 @api_view(['GET'])
 def ReportDetail(request, report_id):
-    if (Report.objects.filter(id=report_id).exists() ):
+    if (Report.objects.filter(id=report_id).exists()):
         reporte = Report.objects.filter(id=report_id).first()
         serializer = ReportSerializer(reporte, many=False)
         return JsonResponse(serializer.data, safe=False)
     else:
-        return JsonResponse({'error': 'El reporte no existe' }, status=404)
+        return JsonResponse({'error': 'El reporte no existe'}, status=404)
 
 
 # def publicar(request):  # Vista para guardar una adopción
