@@ -133,43 +133,32 @@ def map(request):
 
 
 def publish(request):
-    if request.method == 'POST':
-        form = ReportForm(request.POST, request.FILES)
-        if form.is_valid():
-            instance = form.save()
-            report_id = instance.id
-            return JsonResponse({'success': True, 'id': report_id})
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors})
-    else:
-        csrf_token = csrf.get_token(request)
-        return JsonResponse({'csrfToken': csrf_token})
     # if this is a POST request we need to process the form data
-    # if request.method == 'POST':
-    #     # create a form instance and populate it with data from the request:
-    #     form = ReportForm(request.POST, request.FILES)
-    #     # check whether it's valid:
-    #     if form.is_valid():
-    #         if form.cleaned_data['latitude'] and form.cleaned_data['longitude']:
-    #             instance = form.save(commit=False)
-    #             instance.save()
-    #             report_id = str(instance.id)
-    #             request.session['pp_publish'] = True
-    #             request.session['pp_tweet'] = True
-    #             # redirect to another view where is the report id
-    #             return redirect('success', report_id=report_id)
-    #         else:
-    #             messages.error(
-    #                 request, "Es necesario una ubicación, por favor marque un punto en el mapa")
-    #     else:
-    #         messages.error(
-    #             request, "Por favor verifique los datos del formulario")
-    # else:
-    #     form = ReportForm()
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ReportForm(request.POST, request.FILES)
+        # check whether it's valid:
+        if form.is_valid():
+            if form.cleaned_data['latitude'] and form.cleaned_data['longitude']:
+                instance = form.save(commit=False)
+                instance.save()
+                report_id = str(instance.id)
+                request.session['pp_publish'] = True
+                request.session['pp_tweet'] = True
+                # redirect to another view where is the report id
+                return redirect('success', report_id=report_id)
+            else:
+                messages.error(
+                    request, "Es necesario una ubicación, por favor marque un punto en el mapa")
+        else:
+            messages.error(
+                request, "Por favor verifique los datos del formulario")
+    else:
+        form = ReportForm()
 
-    # context = {'form': form}
+    context = {'form': form}
 
-    # return render(request, 'publicar.html', context)
+    return render(request, 'publicar.html', context)
 
 
 def success(request, report_id):
@@ -406,8 +395,20 @@ def publicar_adopcion(request):
     else:
         csrf_token = csrf.get_token(request)
         return JsonResponse({'csrfToken': csrf_token})
-
-
+    
+def publicar_reporte(request):
+    if request.method == 'POST':
+        form = ReportForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save()
+            report_id = instance.id
+            return JsonResponse({'success': True, 'id': report_id})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        csrf_token = csrf.get_token(request)
+        return JsonResponse({'csrfToken': csrf_token})
+    
 @api_view(['GET'])
 def ReportDetail(request, report_id):
     if (Report.objects.filter(id=report_id).exists()):
