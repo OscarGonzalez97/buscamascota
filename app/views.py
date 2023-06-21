@@ -343,7 +343,7 @@ class ReportListAPIView(APIView):
                 serializer = ReportSerializer(reports, many=True)
                 is_paginated = False
             elif paginated == 'true':
-                raise Exception() #Para que ingrese a bloque Except
+                raise Exception()  # Para que ingrese a bloque Except
         except:
             paginator = CustomPagination()
             result_page = paginator.paginate_queryset(reports, request)
@@ -354,25 +354,24 @@ class ReportListAPIView(APIView):
         else:
             return JsonResponse({'results': serializer.data}, safe=False)
 
+    def post(self, request, format=None):
+        form = FilterForm(request.POST)
+        # if 'search' in request.POST:
+        if form.is_valid():
+            report_type = form.cleaned_data['report_type']
+            specie = form.cleaned_data['specie']
+            country = form.cleaned_data['country']
+            city = form.cleaned_data['city']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
 
-def post(self, request, format=None):
-    form = FilterForm(request.POST)
-    # if 'search' in request.POST:
-    if form.is_valid():
-        report_type = form.cleaned_data['report_type']
-        specie = form.cleaned_data['specie']
-        country = form.cleaned_data['country']
-        city = form.cleaned_data['city']
-        date_from = form.cleaned_data['date_from']
-        date_to = form.cleaned_data['date_to']
+        paginator = CustomPagination()
+        reports = filter_reports(
+            report_type, specie, country, city, date_from, date_to)
 
-    paginator = CustomPagination()
-    reports = filter_reports(
-        report_type, specie, country, city, date_from, date_to)
-
-    result_page = paginator.paginate_queryset(reports, request)
-    serializer = ReportSerializer(result_page, many=True)
-    return paginator.get_paginated_response(serializer.data)
+        result_page = paginator.paginate_queryset(reports, request)
+        serializer = ReportSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 def report_list(request):
