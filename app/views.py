@@ -341,11 +341,25 @@ class ReportListAPIView(APIView):
 
     def get(self, request, format=None):
         this_year = datetime.date.today().year
-        paginator = CustomPagination()
         reports = Report.objects.filter(created_at__year=this_year).order_by('last_time_seen')
-        result_page = paginator.paginate_queryset(reports, request)
-        serializer = ReportSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        is_paginated = True
+
+        try:
+            paginated = request.query_params["paginated"]
+            if paginated == 'false':
+                serializer = ReportSerializer(reports, many=True)
+                is_paginated = False
+            elif paginated == 'true':
+                raise Exception()  # Para que ingrese a bloque Except
+        except:
+            paginator = CustomPagination()
+            result_page = paginator.paginate_queryset(reports, request)
+            serializer = ReportSerializer(result_page, many=True)
+
+        if is_paginated:
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            return JsonResponse({'results': serializer.data}, safe=False)
 
     def post(self, request, format=None):
         form = FilterForm(request.POST)
