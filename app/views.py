@@ -362,8 +362,8 @@ class ReportListAPIView(APIView):
             return JsonResponse({'results': serializer.data}, safe=False)
 
     def post(self, request, format=None):
-        form = FilterForm(request.POST)
-        # if 'search' in request.POST:
+        form = FilterForm(request.data)
+        report_type = specie = country = city = date_from = date_to = ''
         if form.is_valid():
             report_type = form.cleaned_data['report_type']
             specie = form.cleaned_data['specie']
