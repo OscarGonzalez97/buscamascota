@@ -352,7 +352,7 @@ class ReportListAPIView(APIView):
         if is_paginated:
             return paginator.get_paginated_response(serializer.data)
         else:
-            return JsonResponse(serializer.data, safe=False)
+            return JsonResponse({'results': serializer.data}, safe=False)
 
 
 def post(self, request, format=None):
