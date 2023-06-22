@@ -489,7 +489,7 @@ class ReportGetAPIView(RetrieveAPIView):
 class PetAdoptionListAPIView(ListAPIView):
     def get(self, request, format=None):
         paginator = PetAdoptionPagination()
-        pet_adoptions = PetAdoptionModel.objects.all()
+        pet_adoptions = PetAdoptionModel.objects.filter(allowed=True)
         result_page = paginator.paginate_queryset(pet_adoptions, request)
         serializer = PetAdoptionSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
@@ -503,7 +503,7 @@ class PetAdoptionListAPIView(ListAPIView):
             # Add more filter fields as per your requirements
 
             # Apply filters to the queryset
-            queryset = self.get_queryset()
+            queryset = self.get_queryset().filter(allowed=True)
             if specie:
                 queryset = queryset.filter(specie=specie)
             if country:
