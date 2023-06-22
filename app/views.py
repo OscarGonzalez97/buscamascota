@@ -1,37 +1,29 @@
+import datetime
 import json
 import sys
 import urllib
 from io import BytesIO
 from urllib.parse import urlencode
 
-from django.middleware import csrf
-from rest_framework.pagination import PageNumberPagination
-
+from PIL import Image
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
+from django.middleware import csrf
 from django.shortcuts import render, redirect
-from PIL import Image
-from rest_framework.response import Response
-from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework import generics
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from app.forms import ReportForm, ReportSucessForm, FilterForm, PetAdoptionModelForm
 from app.models import Report, ReportImage, PetAdoptionModel
 from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
-from app.utils import tweet, post_instagram_facebook
-from rest_framework.generics import RetrieveAPIView
-from rest_framework.response import Response
-from .models import Report
-
-from .serializers import ReportSerializer, ReportImageSerializer
-import datetime
-
 from .pagination import CustomPagination
-from rest_framework.views import APIView
 
 
 def index(request):
