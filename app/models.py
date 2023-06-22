@@ -27,6 +27,7 @@ class Report(models.Model):
     last_time_seen = models.DateField()
     accept_terms = models.BooleanField(default=False)
     allowed = models.BooleanField(default=True)
+    is_tweeted = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # On save, update timestamps
