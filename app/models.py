@@ -42,7 +42,6 @@ class Report(models.Model):
 
 
 class PetAdoptionModel(models.Model):
-    title = models.CharField(max_length=100)
     name = models.CharField(max_length=100,null=True, blank=True)
     description = models.TextField()
     specie = models.CharField(max_length=6, choices=SPECIE)
