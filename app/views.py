@@ -487,32 +487,28 @@ class ReportGetAPIView(RetrieveAPIView):
 
 
 class PetAdoptionListAPIView(ListAPIView):
-    def get(self, request, format=None):
-        paginator = PetAdoptionPagination()
-        pet_adoptions = PetAdoptionModel.objects.all()
-        result_page = paginator.paginate_queryset(pet_adoptions, request)
-        serializer = PetAdoptionSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+    serializer_class = PetAdoptionSerializer
+    pagination_class = PetAdoptionPagination
+
+    def get_queryset(self):
+        return PetAdoptionModel.objects.filter(allowed=True)
 
     def post(self, request, format=None):
-        form = FilterForm(request.POST)  # Assuming you have a form for filtering
+        form = FilterForm(request.POST)
         if form.is_valid():
             specie = form.cleaned_data['specie']
             country = form.cleaned_data['country']
             city = form.cleaned_data['city']
-            # Add more filter fields as per your requirements
 
-            # Apply filters to the queryset
             queryset = self.get_queryset()
+
             if specie:
                 queryset = queryset.filter(specie=specie)
             if country:
                 queryset = queryset.filter(country=country)
             if city:
                 queryset = queryset.filter(city=city)
-            # Apply more filters based on the form fields
 
-            # Paginate the filtered queryset
             paginator = self.pagination_class()
             page = paginator.paginate_queryset(queryset, request)
             serializer = self.serializer_class(page, many=True)
