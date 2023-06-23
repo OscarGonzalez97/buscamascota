@@ -470,10 +470,10 @@ def ReportDetail(request, report_id):
 #
 
 
-class PetAdoptionPagination(PageNumberPagination):
-    page_size = 10  # Number of pet adoptions per page
-    page_size_query_param = 'page_size'
-    max_page_size = 100
+# class PetAdoptionPagination(PageNumberPagination):
+#     page_size = 10  # Number of pet adoptions per page
+#     page_size_query_param = 'page_size'
+#     max_page_size = 100
 
 
 class ReportGetAPIView(RetrieveAPIView):
@@ -488,7 +488,7 @@ class ReportGetAPIView(RetrieveAPIView):
 
 class PetAdoptionListAPIView(ListAPIView):
     serializer_class = PetAdoptionSerializer
-    pagination_class = PetAdoptionPagination
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         return PetAdoptionModel.objects.filter(allowed=True)
