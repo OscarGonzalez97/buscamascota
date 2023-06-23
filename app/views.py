@@ -413,7 +413,7 @@ def adopt(request, adopt_id):
     except PetAdoptionModel.DoesNotExist:
         return JsonResponse({'error': 'La adopción no existe.'}, status=404)
 
-
+@csrf_exempt
 def publicar_adopcion(request):
     if request.method == 'POST':
         form = PetAdoptionModelForm(request.POST, request.FILES)
