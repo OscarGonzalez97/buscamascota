@@ -27,3 +27,8 @@ class AdoptDetailSerializer(serializers.ModelSerializer):  # Endpoint para detal
     class Meta:
         model = PetAdoptionModel
         fields = ['title', 'name', 'description', 'specie', 'age', 'sex', 'city', 'country', 'phone', 'picture']
+
+
+class ReportSuccessSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    image = serializers.CharField()
