@@ -22,8 +22,10 @@ from rest_framework.views import APIView
 
 from app.forms import ReportForm, ReportSucessForm, FilterForm, PetAdoptionModelForm
 from app.models import Report, ReportImage, PetAdoptionModel
-from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
+from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer, ReportSuccessSerializer
+from buscamascota import settings
 from .pagination import CustomPagination
+from .utils import tweet
 
 
 def index(request):
@@ -230,6 +232,29 @@ def success(request, report_id):
         return render(request, 'exito.html', context)
     else:
         return render(request, 'exito-escritorio.html', context)
+
+
+class ReportSuccessAPIView(APIView):
+    def post(self, request):
+        serializer = ReportSuccessSerializer(data=request.data)
+        if serializer.is_valid():
+            id = serializer.validated_data['id']
+            image = serializer.validated_data['image']
+            report = Report.objects.get(id=int(id))
+
+            url = settings.URL + 'reportesget/' + id
+
+            # publish at Twitter
+            tweet(report.report_type, report.country,
+                  report.title, image, url)
+            report.is_tweeted = True
+            report.save()
+            # publish at Instagram & Facebook
+            # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
+            return Response({'status': 'success', 'message': 'Report created successfully.'})
+
+        return Response(serializer.errors, status=400)
+
 
 
 def report(request, report_id):
@@ -441,25 +466,6 @@ def ReportDetail(request, report_id):
         return JsonResponse(serializer.data, safe=False)
     else:
         return JsonResponse({'error': 'El reporte no existe'}, status=404)
-
-
-# def publicar(request):  # Vista para guardar una adopción
-#     if request.method == 'POST':
-#         form = PetAdoptionModelForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             instance = form.save(commit=False)
-#             adopt_id = str(instance.id)
-#             request.session['pp_publish'] = True
-#             return redirect('success', adopt_id=adopt_id)
-#         else:
-#             messages.error(request, 'Por favor, verifique los datos del formulario')
-#     else:
-#         form = PetAdoptionModelForm()
-#
-#     context = {'form': form}
-#
-#     return render(request, 'adoptar.html', context)
-#
 
 
 class PetAdoptionPagination(PageNumberPagination):
