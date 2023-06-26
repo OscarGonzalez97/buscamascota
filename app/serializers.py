@@ -26,7 +26,7 @@ class PetAdoptionSerializer(serializers.ModelSerializer):
 class AdoptDetailSerializer(serializers.ModelSerializer):  # Endpoint para detalle de adopciones
     class Meta:
         model = PetAdoptionModel
-        fields = ['title', 'name', 'description', 'specie', 'age', 'sex', 'city', 'country', 'phone', 'picture']
+        fields = ['name', 'description', 'specie', 'age', 'sex', 'city', 'country', 'phone', 'picture']
 
 
 class ReportSuccessSerializer(serializers.Serializer):
