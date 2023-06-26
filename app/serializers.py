@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Report, ReportImage, PetAdoptionModel
 
-from .models import Report
 
 
 class ReportSerializer(serializers.ModelSerializer):
@@ -28,3 +27,8 @@ class AdoptDetailSerializer(serializers.ModelSerializer):  # Endpoint para detal
     class Meta:
         model = PetAdoptionModel
         fields = ['name', 'description', 'specie', 'age', 'sex', 'city', 'country', 'phone', 'picture']
+
+
+class ReportSuccessSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    image = serializers.CharField()

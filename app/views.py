@@ -1,37 +1,31 @@
+import datetime
 import json
 import sys
 import urllib
 from io import BytesIO
 from urllib.parse import urlencode
 
-from django.middleware import csrf
-from rest_framework.pagination import PageNumberPagination
-
+from PIL import Image
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
+from django.middleware import csrf
 from django.shortcuts import render, redirect
-from PIL import Image
-from rest_framework.response import Response
-from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework import generics
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from app.forms import ReportForm, ReportSucessForm, FilterForm, PetAdoptionModelForm
 from app.models import Report, ReportImage, PetAdoptionModel
-from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer
-from app.utils import tweet, post_instagram_facebook
-from rest_framework.generics import RetrieveAPIView
-from rest_framework.response import Response
-from .models import Report
-
-from .serializers import ReportSerializer, ReportImageSerializer
-import datetime
-
+from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer, ReportSuccessSerializer
+from buscamascota import settings
 from .pagination import CustomPagination
-from rest_framework.views import APIView
+from .utils import tweet
 
 
 def index(request):
@@ -238,6 +232,29 @@ def success(request, report_id):
         return render(request, 'exito.html', context)
     else:
         return render(request, 'exito-escritorio.html', context)
+
+
+class ReportSuccessAPIView(APIView):
+    def post(self, request):
+        serializer = ReportSuccessSerializer(data=request.data)
+        if serializer.is_valid():
+            id = serializer.validated_data['id']
+            image = serializer.validated_data['image']
+            report = Report.objects.get(id=int(id))
+
+            url = settings.URL + 'reportesget/' + id
+
+            # publish at Twitter
+            tweet(report.report_type, report.country,
+                  report.title, image, url)
+            report.is_tweeted = True
+            report.save()
+            # publish at Instagram & Facebook
+            # post_instagram_facebook(report.report_type, report.country, report.title, reportImage.picture, url)
+            return Response({'status': 'success', 'message': 'Report created successfully.'})
+
+        return Response(serializer.errors, status=400)
+
 
 
 def report(request, report_id):

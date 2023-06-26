@@ -16,11 +16,12 @@ urlpatterns = [
     path('terminos/', views.terms, name='terminos'),
     path('licencia/', views.license, name='licencia'),
     path('exito/<int:report_id>', views.success, name='success'),
+    path('exito-api/', views.ReportSuccessAPIView.as_view(), name='success-api'),
     re_path(r'^reporte/(?P<report_id>[0-9]+)$', views.report, name='report'),
     path('lista_reportes', views.report_list, name="lista_reportes"),
     re_path(r'^adopcion/(?P<adopt_id>[0-9]+)$', views.adopt, name='adopt'),
     path('detalle_adopcion', views.PetAdoptionModel, name="detalle_adopcion"),  #Url para guardar una adopción
-path('reportesget/<int:pk>/', views.ReportGetAPIView.as_view(), name='report-get'),
+    path('reportesget/<int:pk>/', views.ReportGetAPIView.as_view(), name='report-get'),
     path('adopciones-publicar/', views.publicar_adopcion, name="adopciones-publicar"),
     path('reportes-publicar/', views.publicar_reporte, name="reportes-publicar"),
 

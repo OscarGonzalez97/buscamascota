@@ -157,6 +157,9 @@ MESSAGE_TAGS = {
 FILE_UPLOAD_HANDLER=["django.core.files.uploadhandler.MemoryFileUploadHandler",
  "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
 
+
+URL = 'http://127.0.0.1:5173/'
+
 try:
     from .local_settings import *
 except ImportError as e:
