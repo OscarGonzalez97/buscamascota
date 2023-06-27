@@ -20,7 +20,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from app.forms import ReportForm, ReportSucessForm, FilterForm, PetAdoptionModelForm
+from app.forms import ReportForm, ReportSucessForm, FilterForm, PetAdoptionModelForm, PetFilterAdoptionModelForm
 from app.models import Report, ReportImage, PetAdoptionModel
 from app.serializers import ReportSerializer, AdoptDetailSerializer, PetAdoptionSerializer, ReportSuccessSerializer
 from buscamascota import settings
@@ -509,13 +509,24 @@ class PetAdoptionListAPIView(ListAPIView):
 
     def get_queryset(self):
         return PetAdoptionModel.objects.filter(allowed=True)
+        
+    
+    def get(self, request, format=None):
+        queryset = self.get_queryset()
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(queryset, request)
+        serializer = self.serializer_class(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
 
     def post(self, request, format=None):
-        form = FilterForm(request.POST)
+        form = PetFilterAdoptionModelForm(request.data)
         if form.is_valid():
             specie = form.cleaned_data['specie']
             country = form.cleaned_data['country']
             city = form.cleaned_data['city']
+            state = form.cleaned_data['state']
+            sex = form.cleaned_data['sex']
 
             queryset = self.get_queryset()
 
@@ -525,6 +536,12 @@ class PetAdoptionListAPIView(ListAPIView):
                 queryset = queryset.filter(country=country)
             if city:
                 queryset = queryset.filter(city=city)
+            if state:
+                queryset = queryset.filter(state=state)
+            if sex:
+                queryset = queryset.filter(sex=sex)
+
+            print(queryset)
 
             paginator = self.pagination_class()
             page = paginator.paginate_queryset(queryset, request)

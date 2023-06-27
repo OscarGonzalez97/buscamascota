@@ -49,6 +49,7 @@ class PetAdoptionModel(models.Model):
     age = models.PositiveIntegerField(null=True, blank=True)
     sex = models.CharField(max_length=12, choices=SEX)
     city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
     country = models.CharField(max_length=100,)
     phone = models.CharField(max_length=30, null=True,blank=True)
     picture = models.ImageField(upload_to='pet_pictures/')

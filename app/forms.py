@@ -1,5 +1,5 @@
 from django import forms
-from app.constants import REPORT_TYPE, SPECIE
+from app.constants import REPORT_TYPE, SPECIE, SEX
 from app.models import Report, ReportImage, PetAdoptionModel
 from django.utils.safestring import mark_safe
 
@@ -143,3 +143,12 @@ class PetAdoptionModelForm(forms.ModelForm):
     class Meta:
         model = PetAdoptionModel
         fields = ['name', 'description', 'specie', 'age', 'sex', 'city', 'country', 'phone', 'picture']
+
+
+class PetFilterAdoptionModelForm(forms.Form):
+    specie = forms.ChoiceField(widget = forms.Select(), choices=SPECIE_ALL, required=False)
+    country = forms.CharField(widget = forms.TextInput(), required=False)
+    city = forms.CharField(widget = forms.TextInput(), required=False)
+    state = forms.CharField(widget = forms.TextInput(), required=False)
+    sex = forms.ChoiceField(widget = forms.Select(),choices=SEX, required=False)
+    
