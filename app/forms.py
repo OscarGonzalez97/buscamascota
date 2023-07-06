@@ -142,7 +142,7 @@ class FilterForm(forms.Form):
 class PetAdoptionModelForm(forms.ModelForm):
     class Meta:
         model = PetAdoptionModel
-        fields = ['name', 'description', 'specie', 'age', 'sex', 'city', 'country', 'phone', 'picture']
+        fields = ['name', 'description', 'specie', 'age', 'sex', 'state', 'city', 'country', 'phone', 'picture']
 
 
 class PetFilterAdoptionModelForm(forms.Form):
