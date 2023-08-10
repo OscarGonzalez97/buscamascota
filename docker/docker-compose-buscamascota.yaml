@@ -1,0 +1,26 @@
+services:
+  nginx:
+    container_name: nginx_buscamascota
+    restart: on-failure
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/app/static
+    ports:
+      - 8888:8888
+    depends_on:
+      - web
+  web:
+    container_name: buscamascota_app
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: always
+    env_file:
+      - current.env
+    command: sh -c "gunicorn buscamascota.wsgi:application --bind 0.0.0.0:5000"
+    volumes:
+      - static_volume:/app/static
+
+volumes:
+  static_volume:
