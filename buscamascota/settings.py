@@ -157,7 +157,7 @@ FILE_UPLOAD_HANDLER=["django.core.files.uploadhandler.MemoryFileUploadHandler",
  "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
 
 
-URL = 'http://127.0.0.1:5173/'
+URL = 'http://localhost:9000/'
 
 try:
     from .local_settings import *
