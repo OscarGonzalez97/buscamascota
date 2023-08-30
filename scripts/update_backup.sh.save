@@ -1,0 +1,4 @@
+docker ps -aqf "name=buscamascota_app"#!/bin/sh
+
+docker cp 31effd2049bb:/app/db.sqlite3 /home/roshka/buscamascota/db.sqlite3
+
