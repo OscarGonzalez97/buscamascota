@@ -27,7 +27,7 @@ RUN mv buscamascota/local_settings_docker.py buscamascota/local_settings.py
 RUN python manage.py migrate
 
 # Create a superuser for the application
-RUN echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
+#RUN echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
 
 # Collect static files
 RUN python manage.py collectstatic --no-input
